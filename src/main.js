@@ -1,207 +1,212 @@
-import * as THREE from "three";
-import {
-  positionLocal,
-  normalLocal,
-  normalize,
-  modelWorldMatrix,
-  cameraProjectionMatrix,
-  cameraViewMatrix,
-  mix,
-  attributeArray,
-  clamp,
-  time,
-  mx_noise_float,
-  Fn,
-  uint,
-  float,
-  cross,
-  If,
-  Continue,
-  distance,
-  length,
-  attribute,
-  max,
-  exp,
-  mat3,
-  vec3,
-  select,
-  Loop,
-  instanceIndex,
-  uniform
-} from "three/tsl";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import * as THREE from 'three';
+import { color, storage, Fn, instancedBufferAttribute, instanceIndex, sin, time, float, uniform, shapeCircle, mix, vec3 } from 'three/tsl';
 
-class FlockGeometry extends THREE.BufferGeometry {
-  constructor(geo) {
-    super();
+import Stats from 'three/addons/libs/stats.module.js';
 
-    const geometry = geo.toNonIndexed();
-    const srcPosAttr = geometry.getAttribute( "position" );
-    const srcNormAttr = geometry.getAttribute( "normal" );
-    const count = srcPosAttr.count;
-    const total = count * BOIDS;
-    
-    const posAttr = new THREE.BufferAttribute(new Float32Array(total * 3), 3); 
-    const normAttr = new THREE.BufferAttribute(new Float32Array(total * 3), 3); 
-    const instanceIDAttr = new THREE.BufferAttribute(new Uint32Array(total), 1);
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-    this.setAttribute("instanceID", instanceIDAttr);
-    this.setAttribute("position", posAttr);
-    this.setAttribute("normal", normAttr);
+import * as GeometryUtils from 'three/addons/utils/GeometryUtils.js';
 
-    for (let b = 0; b < BOIDS; b++) {
-      let offset = b * count * 3;
-      for (let i = 0; i < count * 3; i++) {
-        posAttr.array[offset + i] = srcPosAttr.array[i];
-        normAttr.array[offset + i] = srcNormAttr.array[i];
-      }
-      offset = b * count;
-      for (let i = 0; i < count; i++) {
-        instanceIDAttr.array[offset + i] = b;
-      }
-    }
-  }
-}
+let renderer, scene, camera, camera2, controls, backgroundNode;
+let material;
+let stats;
+let gui;
+let effectController;
 
-let container;
+// viewport
+let insetWidth;
+let insetHeight;
 
-let camera,
-  scene,
-  renderer,
-  options,
-  material,
-  assetPath,
-  clock,
-  boid,
-  flock,
-  deltaTime,
-  computeVelocity,
-  computePosition,
-  computeTest;
-
-const BOIDS = 9;
+// compute
+let computeSize;
 
 init();
 
-function init() {
-  container = document.createElement("div");
-  document.body.appendChild(container);
-
-  camera = new THREE.PerspectiveCamera(
-    40,
-    window.innerWidth / window.innerHeight,
-    1,
-    100
-  );
-  camera.position.set(0.0, 1, 2);
-
-  //
+async function init() {
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x444488);
 
-  //
+  camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
+  camera.position.set( - 40, 0, 60 );
 
-  renderer = new THREE.WebGPURenderer({ antialias: true });
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setAnimationLoop(render);
-  container.appendChild(renderer.domElement);
+  camera2 = new THREE.PerspectiveCamera( 40, 1, 1, 1000 );
+  camera2.position.copy( camera.position );
 
-  //
+  backgroundNode = color( 0x222222 );
 
-  //content
+  effectController = {
 
-  const ambient = new THREE.HemisphereLight(0xaaaaaa, 0x333333);
-  const light = new THREE.DirectionalLight(0xffffff, 3);
-  light.position.set(3, 3, 1);
-  scene.add(ambient);
-  scene.add(light);
+    pulseSpeed: uniform( 6 ),
+    minWidth: uniform( 6 ),
+    maxWidth: uniform( 20 ),
+    alphaToCoverage: true
 
-  clock = new THREE.Clock();
-  
-  const controls = new OrbitControls(camera, renderer.domElement);
+  };
 
-  assetPath = "https://assets.codepen.io/2666677/";
+  // Position and THREE.Color Data
 
-  loadGLB("boid");
+  const points = GeometryUtils.hilbert3D( new THREE.Vector3( 0, 0, 0 ), 20.0, 4, 0, 1, 2, 3, 4, 5, 6, 7 );
 
-  window.addEventListener("resize", onWindowResize);
-}
+  const spline = new THREE.CatmullRomCurve3( points );
+  const divisions = Math.round( 4 * points.length );
+  const point = new THREE.Vector3();
+  const pointColor = new THREE.Color();
 
-function loadGLB(name) {
-  const loader = new GLTFLoader().setPath(assetPath);
-  const dracoLoader = new DRACOLoader();
-  dracoLoader.setDecoderPath(
-    "https://cdn.jsdelivr.net/npm/three@v0.170.0/examples/jsm/libs/draco/gltf/"
-  );
-  loader.setDRACOLoader(dracoLoader);
+  const positions = [];
+  const colors = [];
+  const sizes = new Float32Array( divisions );
 
-  loader.load(`${name}.glb`, (gltf) => {
-    boid = gltf.scene.children[0];
-    const scale = 0.2;
-    boid.geometry.scale( scale, scale, scale );
+  for ( let i = 0, l = divisions; i < l; i ++ ) {
 
-    tsl();
-    //scene.add(boid);
-  });
-}
+    const t = i / l;
 
-function initStorage() {
-  const positionArray = new Float32Array(BOIDS * 3);
+    spline.getPoint( t, point );
+    positions.push( point.x, point.y, point.z );
 
-  const cellSize = 0.5;
-  
-  for (let i = 0; i < BOIDS; i++) {
-    const offset = i * 3;
-    const row = (i % 3) - 1;
-    const col = (~~(i / 3)) - 1;
-    positionArray[offset + 0] = col * cellSize; 
-    positionArray[offset + 1] = row * cellSize; 
+    pointColor.setHSL( t, 1.0, 0.5, THREE.SRGBColorSpace );
+    colors.push( pointColor.r, pointColor.g, pointColor.b );
+
+    sizes[ i ] = 10.0;
+
   }
 
-  const positionStorage = attributeArray(positionArray, "vec3").label(
-    "positionStorage"
-  );
+  // Instanced Points
 
-  // The Pixel Buffer Object (PBO) is required to get the GPU computed data in the WebGL2 fallback.
-  positionStorage.setPBO(true);
+  const positionAttribute = new THREE.InstancedBufferAttribute( new Float32Array( positions ), 3 );
+  const colorsAttribute = new THREE.InstancedBufferAttribute( new Float32Array( colors ), 3 );
 
-  return positionStorage;
-}
+  const instanceSizeBufferAttribute = new THREE.StorageInstancedBufferAttribute( sizes, 1 );
+  const instanceSizeStorage = storage( instanceSizeBufferAttribute, 'float', instanceSizeBufferAttribute.count );
 
-function tsl() {
-  const positionStorage = initStorage();
+  computeSize = Fn( () => {
 
-  const flockVertexTSL = Fn(() => {
-    const instanceID = attribute("instanceID");
-    
-    const finalVert = modelWorldMatrix.mul(positionLocal).add(positionStorage.element(instanceID)).toVar();
+    const { pulseSpeed, minWidth, maxWidth } = effectController;
 
-    return cameraProjectionMatrix.mul(cameraViewMatrix).mul(finalVert);
-  });
-  
-  const geometry = new FlockGeometry(boid.geometry);
-  const material = new THREE.MeshStandardNodeMaterial();
+    const relativeTime = time.add( float( instanceIndex ) );
 
-  flock = new THREE.Mesh(geometry, material);
-  scene.add(flock);
+    const sizeFactor = sin( relativeTime.mul( pulseSpeed ) ).add( 1 ).div( 2 );
 
-  material.vertexNode = flockVertexTSL();
+    instanceSizeStorage.element( instanceIndex ).assign( sizeFactor.mul( maxWidth.sub( minWidth ) ).add( minWidth ) );
+
+  } )().compute( divisions );
+
+  // Material / Sprites
+
+  const attributeRange = instancedBufferAttribute( instanceSizeBufferAttribute );
+  const pointColors = mix( vec3( 0.0 ), instancedBufferAttribute( colorsAttribute ), attributeRange.div( float( effectController.maxWidth ) ) );
+
+  material = new THREE.PointsNodeMaterial( {
+
+    colorNode: pointColors,
+    opacityNode: shapeCircle(),
+    positionNode: instancedBufferAttribute( positionAttribute ),
+    // rotationNode: time,
+    sizeNode: instancedBufferAttribute( instanceSizeBufferAttribute ),
+    // size: 40, // in pixels units
+    vertexColors: true,
+    sizeAttenuation: false,
+    alphaToCoverage: true
+
+  } );
+
+  const instancedPoints = new THREE.Sprite( material );
+  instancedPoints.count = divisions;
+  scene.add( instancedPoints );
+
+  // Renderer / Controls
+
+  renderer = new THREE.WebGPURenderer( { antialias: true } );
+  renderer.setPixelRatio( window.devicePixelRatio );
+  renderer.setSize( window.innerWidth, window.innerHeight );
+  renderer.setAnimationLoop( animate );
+  //renderer.logarithmicDepthBuffer = true;
+  document.body.appendChild( renderer.domElement );
+
+  controls = new OrbitControls( camera, renderer.domElement );
+  controls.enableDamping = true;
+  controls.minDistance = 10;
+  controls.maxDistance = 500;
+
+  window.addEventListener( 'resize', onWindowResize );
+  onWindowResize();
+
+  // GUI
+
+  stats = new Stats();
+  document.body.appendChild( stats.dom );
+
+  gui = new GUI();
+
+  gui.add( effectController, 'alphaToCoverage' ).onChange( function ( val ) {
+
+    material.alphaToCoverage = val;
+
+  } );
+
+  gui.add( effectController.minWidth, 'value', 1, 30, 1 ).name( 'minWidth' );
+  gui.add( effectController.maxWidth, 'value', 2, 30, 1 ).name( 'maxWidth' );
+  gui.add( effectController.pulseSpeed, 'value', 1, 20, 0.1 ).name( 'pulseSpeed' );
+
 }
 
 function onWindowResize() {
+
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize( window.innerWidth, window.innerHeight );
+
+  insetWidth = window.innerHeight / 4; // square
+  insetHeight = window.innerHeight / 4;
+
+  camera2.aspect = insetWidth / insetHeight;
+  camera2.updateProjectionMatrix();
+
 }
 
-//
+function animate() {
 
-function render() {
-  renderer.render(scene, camera);
+  stats.update();
+
+  // compute
+
+  renderer.compute( computeSize );
+
+  // main scene
+
+  renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
+
+  controls.update();
+
+  renderer.autoClear = true;
+
+  scene.backgroundNode = null;
+
+  renderer.render( scene, camera );
+
+  // inset scene
+
+  const posY = window.innerHeight - insetHeight - 20;
+
+  renderer.clearDepth(); // important!
+
+  renderer.setScissorTest( true );
+
+  renderer.setScissor( 20, posY, insetWidth, insetHeight );
+
+  renderer.setViewport( 20, posY, insetWidth, insetHeight );
+
+  camera2.position.copy( camera.position );
+
+  camera2.quaternion.copy( camera.quaternion );
+
+  renderer.autoClear = false;
+
+  scene.backgroundNode = backgroundNode;
+
+  renderer.render( scene, camera2 );
+
+  renderer.setScissorTest( false );
+
 }
