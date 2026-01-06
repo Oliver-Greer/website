@@ -1,26 +1,52 @@
 import * as THREE from 'three';
-import { textureStore, textureLoad, texture, int, ivec2, max, color, storage, Fn, If, instanceIndex, vertexIndex, sin, vec2, mod, float, PI, hash, cos, uniform, vec3, vec4, time} from 'three/tsl';
+import { 
+    textureStore,
+    texture,
+    int,
+    ivec2,
+    vec2,
+    vec3,
+    vec4,
+    float,
+    max,
+    color,
+    uv,
+    storage,
+    Fn,
+    If,
+    instanceIndex,
+    vertexIndex,
+    sin,
+    cos,
+    PI,
+    hash,
+    uniform,
+    time
+} from 'three/tsl';
 
 let renderer, scene, camera, backgroundNode;
+let agentStorage;
+let trailMapWriteTarget, trailMapReadTarget;
+let trailMap, agentComputeNode, fadeAndDiffuseComputeNode;
 
-let agentComputeTask, limitX, limitY;
-let trailMap;
-let fadeComputeTask;
+const limitX = uniform(0); 
+const limitY = uniform(0);
+const agentCount = 1_000;
+const width = window.innerWidth;
+const height = window.innerHeight;
 
-const agentCount = 1_00;
+initScene();
 
-init();
+async function initScene() {
 
-async function init() {
-
-    
+    // camera and scene
     scene = new THREE.Scene();
     backgroundNode = color(0x000000);
     camera = new THREE.OrthographicCamera(
-        -window.innerWidth / 2, 
-        window.innerWidth / 2,
-        window.innerHeight / 2,
-        -window.innerHeight / 2,
+        -width / 2, 
+        width / 2,
+        height / 2,
+        -height / 2,
         0.1,              
         1000
     );
@@ -31,22 +57,75 @@ async function init() {
 
     for (let count = 0; count < agentCount; count++) {
         const startIndex = count * 4;
-        agentPositionAngleData[startIndex] = (Math.random() * 2 - 1) * window.innerWidth / 2;
-        agentPositionAngleData[startIndex + 1] = (Math.random() * 2 - 1) * window.innerHeight / 2;
+        agentPositionAngleData[startIndex] = (Math.random() * 2 - 1) * width / 2;
+        agentPositionAngleData[startIndex + 1] = (Math.random() * 2 - 1) * height / 2;
         agentPositionAngleData[startIndex + 2] = Math.random() * Math.PI * 2;
         agentPositionAngleData[startIndex + 3] = 0;
     }
 
-    const agentBufferAttribute = new THREE.StorageInstancedBufferAttribute(agentPositionAngleData, 4);
-    const agentStorage = storage(agentBufferAttribute, 'vec4', agentCount);
+    const agentBufferAttribute = new THREE.InstancedBufferAttribute(agentPositionAngleData, 4);
+    agentStorage = storage(agentBufferAttribute, 'vec4', agentCount);
 
-    // initialize trailMap
-    trailMap = new THREE.StorageTexture(window.innerWidth, window.innerHeight);
-    trailMap.type = THREE.FloatType;
-    trailMap.minFilter = THREE.NearestFilter;
-    trailMap.magFilter = THREE.NearestFilter;
+    // initialize trailMap render targets
+    // NOTE: cannot read and write to one within the same compute shader so we make two seperate textures (Ping Pong)
+    const rtSettings = {
+        type: THREE.FloatType,
+        magFilter: THREE.NearestFilter,
+        minFilter: THREE.NearestFilter,
+        depthBuffer: false,
+        stencilBuffer: false
+    };
 
-    agentComputeTask = Fn(([ trailTexture ]) => {
+    const trailBuffer1 = new THREE.StorageTexture(width, height);
+    trailBuffer1.type = THREE.FloatType;
+    trailBuffer1.minFilter = THREE.NearestFilter;
+    trailBuffer1.magFilter = THREE.NearestFilter;
+
+    const trailBuffer2 = new THREE.StorageTexture(width, height);
+    trailBuffer2.type = THREE.FloatType;
+    trailBuffer2.minFilter = THREE.NearestFilter;
+    trailBuffer2.magFilter = THREE.NearestFilter;
+    
+    trailMapWriteTarget = trailBuffer1;
+    trailMapReadTarget = trailBuffer2;
+
+    // agent geometry
+    const agentGeometry = new THREE.BufferGeometry();
+    agentGeometry.setAttribute('position', agentBufferAttribute);
+    agentGeometry.drawRange.count = agentCount;
+
+    const material = new THREE.PointsMaterial();
+    material.colorNode = color(0xffffff);
+
+    material.positionNode = vec3(agentStorage.element(vertexIndex).xy, 0.0);
+    material.size = 1;
+
+    const agents = new THREE.Points(agentGeometry, material);
+    scene.add(agents);
+
+    // trail geometry
+    const planeMaterial = new THREE.NodeMaterial();
+
+    trailMap = new THREE.Mesh(new THREE.PlaneGeometry(width, height), planeMaterial);
+    scene.add(trailMap);
+
+    renderer = new THREE.WebGPURenderer({ antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(width, height);
+    document.body.appendChild(renderer.domElement);
+
+    onWindowResize();
+    agentComputeNode = agentTSL();
+    fadeAndDiffuseComputeNode = fadeAndDiffuseTSL();
+
+    window.addEventListener('resize', onWindowResize);
+
+    renderer.setAnimationLoop(animate);
+}
+
+
+function agentTSL() {
+    const agentComputeTask = Fn(({ writeTexture }) => {
 
         const position = agentStorage.element(instanceIndex).xy;
         const newPositionY = position.y.add(sin(agentStorage.element(instanceIndex).z)).toVar();
@@ -75,6 +154,7 @@ async function init() {
             didHit.assign(1);
         })
         
+        // reflect at random(ish) angle
         If(didHit.greaterThan(0.5), () => {
             const randomAngleOffset = hash(instanceIndex.add(time)).mul(2).sub(1);
             const newAngle = targetAngle.add(randomAngleOffset);
@@ -85,77 +165,82 @@ async function init() {
 
         // write to trail
         const trailCoords = ivec2(int(position.x.add(limitX)), int(position.y.add(limitY)));
-        textureStore(trailTexture, trailCoords, vec4(1,1,1,1));
+        textureStore(writeTexture, trailCoords, vec4(1,1,1,1));
     });
 
-    fadeComputeTask = Fn(([ trailTexture ]) => {
-
-        const x = int(instanceIndex.mod(int(window.innerWidth)));
-        const y = int(instanceIndex.div(int(window.innerWidth)));
-        const coords = ivec2(x, y);
-
-        const currentColor = textureLoad(trailTexture, coords);
-
-        const newColor = max(currentColor.sub(0.2), 0.0);
-
-        textureStore(trailTexture, coords, newColor);
-    })
-
-    // agent geometry
-    const agentGeometry = new THREE.BufferGeometry();
-    agentGeometry.setAttribute('position', agentBufferAttribute);
-    agentGeometry.drawRange.count = agentCount;
-
-    const material = new THREE.PointsNodeMaterial();
-    material.colorNode = color(0xffffff);
-
-    material.positionNode = vec3(agentStorage.element(vertexIndex).xy, 0.0);
-    material.size = 1;
-
-    const agents = new THREE.Points(agentGeometry, material);
-    scene.add(agents);
-
-    // trail geometry
-    const planeMaterial = new THREE.NodeMaterial();
-    planeMaterial.colorNode = texture(trailMap); 
-
-    const screenQuad = new THREE.Mesh(
-        new THREE.PlaneGeometry(window.innerWidth, window.innerHeight),
-        planeMaterial
-    );
-    scene.add(screenQuad);
-
-    renderer = new THREE.WebGPURenderer({ antialias: true });
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setAnimationLoop(animate);
-    document.body.appendChild(renderer.domElement);
-
-    window.addEventListener('resize', onWindowResize);
-    onWindowResize();
+    return agentComputeTask;
 }
 
+
+function fadeAndDiffuseTSL() {
+    const fadeAndDiffuseComputeTask = Fn(({ readTexture, writeTexture}) => {
+
+        const coordX = int(instanceIndex).mod(int(width));
+        const coordY = int(instanceIndex).div(int(width));
+        const center = ivec2(coordX, coordY);
+
+        const limit = ivec2(int(width).sub(1), int(height).sub(1));
+        // values at 5 points
+        const getVal = (offset) => {
+            const coord = center.add(offset).clamp(ivec2(0, 0), limit);
+            return texture(readTexture).load(coord);
+        };
+
+        const sum = getVal(ivec2(0, 0))
+            .add(getVal(ivec2(0, 1)))
+            .add(getVal(ivec2(0, -1)))
+            .add(getVal(ivec2(1, 0)))
+            .add(getVal(ivec2(-1, 0)));
+
+        const averageFadeAndDiffuse = sum.div(5).mul(0.99);
+
+        textureStore(writeTexture, center, averageFadeAndDiffuse)
+    })
+
+    return fadeAndDiffuseComputeTask;
+}
+
+
 function onWindowResize() {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
 
-    // TODO: Need to write a shader here to handle resizing and transfering the texture
-    camera.left = -window.innerWidth / 2;
-    camera.right = window.innerWidth / 2;
-    camera.top = window.innerHeight / 2;
-    camera.bottom = -window.innerHeight / 2;
-    camera.updateProjectionMatrix();
+    if (camera) {
+        camera.left = -w / 2;
+        camera.right = w / 2;
+        camera.top = h / 2;
+        camera.bottom = -h / 2;
+        camera.updateProjectionMatrix();
+    }
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    if (renderer) {
+        renderer.setSize(w, h);
+    }
 
-    limitX = uniform(window.innerWidth / 2);
-    limitY = uniform(window.innerHeight / 2);
-    
+    limitX.value = w / 2;
+    limitY.value = h / 2;
+}
+
+function swapTrailMapBuffers() {
+    const temp = trailMapReadTarget;
+    trailMapReadTarget = trailMapWriteTarget;
+    trailMapWriteTarget = temp;
 }
 
 function animate() {
-    const agentCompute = agentComputeTask(trailMap).compute(agentCount);
-    const fadeCompute = fadeComputeTask(trailMap).compute(window.innerWidth * window.innerHeight);
-    renderer.compute(agentCompute);
-    renderer.compute(fadeCompute);
+    
+    renderer.compute(fadeAndDiffuseComputeNode({ 
+        readTexture: trailMapReadTarget, writeTexture: trailMapWriteTarget 
+    }).compute(width * height))
+
+    renderer.compute(agentComputeNode({ 
+        writeTexture: trailMapWriteTarget 
+    }).compute(agentCount));
+
+    trailMap.material.colorNode = texture(trailMapWriteTarget);
+    
     scene.backgroundNode = backgroundNode;
     renderer.render(scene, camera);
+
+    swapTrailMapBuffers() // Ping Pong Buffers
 }
