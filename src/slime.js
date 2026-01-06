@@ -13,6 +13,7 @@ import {
     storage,
     Fn,
     If,
+    select,
     and,
     instanceIndex,
     vertexIndex,
@@ -31,11 +32,15 @@ let agentStorage;
 let trailMapWriteTarget, trailMapReadTarget;
 let trailMap, agentComputeNode, fadeAndDiffuseComputeNode;
 
-const limitX = uniform(0); 
-const limitY = uniform(0);
-const agentCount = 1_000;
+const agentCount = 200_000;
 let width = window.innerWidth;
 let height = window.innerHeight;
+
+const textureWidth = width;
+const textureHeight = height;
+const resolution = uniform(vec2(textureWidth, textureHeight));
+const limitX = uniform(textureWidth / 2); 
+const limitY = uniform(textureHeight / 2);
 
 initScene();
 
@@ -45,7 +50,7 @@ async function initScene() {
     scene = new THREE.Scene();
     backgroundNode = color(0x000000);
     camera = new THREE.OrthographicCamera(
-        -width / 2, 
+        -width / 2,
         width / 2,
         height / 2,
         -height / 2,
@@ -59,8 +64,8 @@ async function initScene() {
 
     for (let count = 0; count < agentCount; count++) {
         const startIndex = count * 4;
-        agentPositionAngleData[startIndex] = (Math.random() * 2 - 1) * width / 2;
-        agentPositionAngleData[startIndex + 1] = (Math.random() * 2 - 1) * height / 2;
+        agentPositionAngleData[startIndex] = 0;
+        agentPositionAngleData[startIndex + 1] = 0;
         agentPositionAngleData[startIndex + 2] = Math.random() * Math.PI * 2;
         agentPositionAngleData[startIndex + 3] = 0;
     }
@@ -78,12 +83,12 @@ async function initScene() {
         stencilBuffer: false
     };
 
-    const trailBuffer1 = new THREE.StorageTexture(width, height);
+    const trailBuffer1 = new THREE.StorageTexture(textureWidth, textureHeight);
     trailBuffer1.type = THREE.FloatType;
     trailBuffer1.minFilter = THREE.NearestFilter;
     trailBuffer1.magFilter = THREE.NearestFilter;
 
-    const trailBuffer2 = new THREE.StorageTexture(width, height);
+    const trailBuffer2 = new THREE.StorageTexture(textureWidth, textureHeight);
     trailBuffer2.type = THREE.FloatType;
     trailBuffer2.minFilter = THREE.NearestFilter;
     trailBuffer2.magFilter = THREE.NearestFilter;
@@ -97,10 +102,10 @@ async function initScene() {
     agentGeometry.drawRange.count = agentCount;
 
     const material = new THREE.PointsMaterial();
-    material.colorNode = color(0xffffff);
+    material.colorNode = color(0xFFFFFF00);
 
     material.positionNode = vec3(agentStorage.element(vertexIndex).xy, 0.0);
-    material.size = 1;
+    material.size = 5;
 
     const agents = new THREE.Points(agentGeometry, material);
     scene.add(agents);
@@ -130,42 +135,56 @@ function agentTSL() {
     const agentComputeTask = Fn(({ readTexture, writeTexture }) => {
 
         const position = agentStorage.element(instanceIndex).xy;
-        const limit = ivec2(int(width).sub(1), int(height).sub(1));
+        const limit = ivec2(int(resolution.x).sub(1), int(resolution.y).sub(1));
 
         const senseAhead = (senseAngleOffset) => {
-            const sensorOffsetDistance = float(5);
-            const sensorSize = float(2);
+            const sensorOffsetDistance = float(30);
+            const sensorSize = float(5);
             const sensorAngle = agentStorage.element(instanceIndex).z.add(senseAngleOffset);
             const senseDir = vec2(cos(sensorAngle), sin(sensorAngle));
 
-            const coords = ivec2(int(position.x.add(limitX)), int(position.y.add(limitY)));
+            const coords = vec2(position.x.add(limitX), position.y.add(limitY));
             const posOfSensor = coords.add(senseDir.mul(sensorOffsetDistance));
 
-            const sum = float(0).toVar();
+            const sum = float(0.0).toVar();
 
             Loop({
                 start: int(sensorSize.negate()),
-                end: int(sensorSize),
+                end: int(sensorSize).add(1),
                 type: 'int',
-                condition: '<='
+                condition: '<',
+                name: 'offsetX'
             }, ({ offsetX }) => {
                 Loop({
                     start: int(sensorSize.negate()),
-                    end: int(sensorSize),
+                    end: int(sensorSize).add(1),
                     type: 'int',
-                    condition: '<='
+                    condition: '<',
+                    name: 'offsetY'
                 }, ({ offsetY }) => {
-                    const coord = ivec2(posOfSensor.x.add(offsetX), posOfSensor.y.add(offsetY)).clamp(ivec2(0, 0), limit);
-                    sum.addAssign(dot(vec4(1,1,1,1), texture(readTexture).load(coord)));
+                    const samplePos = ivec2(
+                        int(posOfSensor.x.add(float(offsetX))), 
+                        int(posOfSensor.y.add(float(offsetY)))
+                    );
+
+                    const insideScreen = and(
+                        samplePos.x.greaterThanEqual(0),
+                        samplePos.x.lessThanEqual(limit.x),
+                        samplePos.y.greaterThanEqual(0),
+                        samplePos.y.lessThanEqual(limit.y)
+                    );
+
+                    const value = select(insideScreen, texture(readTexture).load(samplePos), vec4(0))
+                    sum.addAssign(dot(vec4(1,1,1,1), value));
                 })
             })
 
             return sum;
         }
         
-        const turnSpeed = float(0.1).mul(TWO_PI);
-        const randomTurnStrength = hash(instanceIndex.add(time).mul(position.x).add(position.y)).mul(2).sub(1);
-        const sensorAngleOffset = float(PI.div(4));
+        const turnSpeed = float(.5).mul(TWO_PI);
+        const randomTurnStrength = hash(instanceIndex.add(time)).mul(2).sub(1);
+        const sensorAngleOffset = float(PI.div(2));
         const weightForward = senseAhead(0.0);
         const weightLeft = senseAhead(sensorAngleOffset);
         const weightRight = senseAhead(sensorAngleOffset.negate());
@@ -173,15 +192,16 @@ function agentTSL() {
         If(and(weightForward.greaterThan(weightLeft), weightForward.greaterThan(weightRight)), () => {
             agentStorage.element(instanceIndex).z.addAssign(0.0);
         }).ElseIf(and(weightForward.lessThan(weightLeft), weightForward.lessThan(weightRight)), () => {
-            agentStorage.element(instanceIndex).z.addAssign(randomTurnStrength.sub(0.5).mul(2).mul(turnSpeed));
+            agentStorage.element(instanceIndex).z.addAssign(randomTurnStrength.sub(0.5).mul(10).mul(turnSpeed));
         }).ElseIf(weightForward.greaterThan(weightLeft), () => {
             agentStorage.element(instanceIndex).z.subAssign(randomTurnStrength.mul(turnSpeed));
         }).ElseIf(weightForward.greaterThan(weightRight), () => {
             agentStorage.element(instanceIndex).z.addAssign(randomTurnStrength.mul(turnSpeed));
         })
 
-        const newPositionY = position.y.add(sin(agentStorage.element(instanceIndex).z)).toVar();
-        const newPositionX = position.x.add(cos(agentStorage.element(instanceIndex).z)).toVar();
+        const moveSpeed = float(1);
+        const newPositionY = position.y.add(sin(agentStorage.element(instanceIndex).z).mul(moveSpeed)).toVar();
+        const newPositionX = position.x.add(cos(agentStorage.element(instanceIndex).z).mul(moveSpeed)).toVar();
         const didHit = float(0).toVar();
         const targetAngle = float(0).toVar();
 
@@ -217,7 +237,7 @@ function agentTSL() {
 
         // write to trail
         const trailCoords = ivec2(int(position.x.add(limitX)), int(position.y.add(limitY)));
-        textureStore(writeTexture, trailCoords, vec4(1,1,1,1));
+        textureStore(writeTexture, trailCoords, vec4(0,1,1,1));
     });
 
     return agentComputeTask;
@@ -227,11 +247,11 @@ function agentTSL() {
 function fadeAndDiffuseTSL() {
     const fadeAndDiffuseComputeTask = Fn(({ readTexture, writeTexture}) => {
 
-        const coordX = int(instanceIndex).mod(int(width));
-        const coordY = int(instanceIndex).div(int(width));
+        const coordX = int(instanceIndex).mod(int(resolution.x));
+        const coordY = int(instanceIndex).div(int(resolution.x));
         const center = ivec2(coordX, coordY);
 
-        const limit = ivec2(int(width).sub(1), int(height).sub(1));
+        const limit = ivec2(int(resolution.x).sub(1), int(resolution.y).sub(1));
         // values at 5 points
         const getVal = (offset) => {
             const coord = center.add(offset).clamp(ivec2(0, 0), limit);
@@ -242,9 +262,13 @@ function fadeAndDiffuseTSL() {
             .add(getVal(ivec2(0, 1)))
             .add(getVal(ivec2(0, -1)))
             .add(getVal(ivec2(1, 0)))
-            .add(getVal(ivec2(-1, 0)));
+            .add(getVal(ivec2(-1, 0)))
+            .add(getVal(ivec2(1, 1)))
+            .add(getVal(ivec2(-1, -1)))
+            .add(getVal(ivec2(-1, 1)))
+            .add(getVal(ivec2(1, 1)));
 
-        const averageFadeAndDiffuse = sum.div(5).mul(0.99);
+        const averageFadeAndDiffuse = sum.div(9).mul(0.99);
 
         textureStore(writeTexture, center, averageFadeAndDiffuse)
     })
@@ -259,6 +283,8 @@ function onWindowResize() {
     width = window.innerWidth;
     height = window.innerHeight;
 
+
+
     if (camera) {
         camera.left = -width / 2;
         camera.right = width / 2;
@@ -270,9 +296,6 @@ function onWindowResize() {
     if (renderer) {
         renderer.setSize(width, height);
     }
-
-    limitX.value = width / 2;
-    limitY.value = height / 2;
 }
 
 function swapTrailMapBuffers() {
@@ -288,13 +311,13 @@ function animate() {
     }).compute(width * height))
 
     renderer.compute(agentComputeNode({ 
-        writeTexture: trailMapWriteTarget 
+        readTexture: trailMapReadTarget, writeTexture: trailMapWriteTarget 
     }).compute(agentCount));
+
+    swapTrailMapBuffers() // Ping Pong Buffers
 
     trailMap.material.colorNode = texture(trailMapWriteTarget);
     
     scene.backgroundNode = backgroundNode;
     renderer.render(scene, camera);
-
-    swapTrailMapBuffers() // Ping Pong Buffers
 }
