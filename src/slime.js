@@ -155,7 +155,7 @@ function agentTSL() {
                     type: 'int',
                     condition: '<='
                 }, ({ offsetY }) => {
-                    const coord = posOfSensor.add(ivec2(int(offsetX), int(offsetY))).clamp(ivec2(0, 0), limit);
+                    const coord = ivec2(posOfSensor.x.add(offsetX), posOfSensor.y.add(offsetY)).clamp(ivec2(0, 0), limit);
                     sum.addAssign(dot(vec4(1,1,1,1), texture(readTexture).load(coord)));
                 })
             })
