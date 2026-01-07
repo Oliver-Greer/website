@@ -11,53 +11,10 @@ body, html {
     padding: 0;
 }
 
+.background-canvas {
+    filter: opacity(75%) blur(15px);
+}
+
 body {
     background-color: var(--background-color);
-}
-
-header {
-    background-color: var(--accent-color);
-    width: 100%;
-    height: 50px;
-    margin: 0;
-    padding: 0;
-    position: relative;
-    top: 0;
-    left: 0;
-    display: flex
-}
-
-a {
-    color: var(--text-color);
-    padding: 1rem;
-    font:
-        0.75rem sans-serif
-}
-
-.pageLinks {
-    width: 100vw;
-    height: 100%;
-    gap: 1rem;
-    display: flex;
-    justify-content: right;
-    align-items: center;
-}
-
-.contentWrapper {
-    margin-top: 5vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 7rem;
-    font:
-        1.5rem sans-serif
-}
-
-.profilePicture {
-    border-radius: 80%
-}
-
-.aboutMeText {
-    color: var(--text-color);
-    text-align: center;
 }

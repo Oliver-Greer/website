@@ -19,11 +19,14 @@ import {
     vertexIndex,
     sin,
     cos,
+    pow,
+    sqrt,
     PI,
     TWO_PI,
     hash,
     uniform,
     time,
+    deltaTime,
     dot
 } from 'three/tsl';
 
@@ -32,19 +35,44 @@ let agentStorage;
 let trailMapWriteTarget, trailMapReadTarget;
 let trailMap, agentComputeNode, fadeAndDiffuseComputeNode;
 
-const agentCount = 200_000;
+const agentCount = 10_000;
+const randomizeStrength = 4;
 let width = window.innerWidth;
 let height = window.innerHeight;
 
-const textureWidth = width;
-const textureHeight = height;
+const textureWidth = width / 4;
+const textureHeight = height / 4;
 const resolution = uniform(vec2(textureWidth, textureHeight));
 const limitX = uniform(textureWidth / 2); 
 const limitY = uniform(textureHeight / 2);
+const sensorOffsetDistance = uniform(10.0);
+const sensorSize = uniform(2.0);
+const turnSpeed = uniform(8);
+const sensorAngleOffset = uniform(Math.PI / 3);
+const moveSpeed = uniform(10);
+
+const resistancePointX = uniform(0);
+const resistancePointY = uniform(0);
+const resistanceRadius = uniform(5);
+
+const trailColor = uniform(new THREE.Color(Math.random() / 2, Math.random() / 2, Math.random() / 2, 1));
+const diffuseFactor = uniform(0.97);
 
 initScene();
 
 async function initScene() {
+
+    // randomize trail color onclick
+    document.body.addEventListener('click', (event) => {
+        trailColor.value = new THREE.Color(Math.random() / 2, Math.random() / 2, Math.random() / 2, 1);
+        sensorOffsetDistance.value += (Math.random() * 2 - 1) * randomizeStrength;
+        turnSpeed.value += (Math.random() * 2 - 1) * randomizeStrength;
+        moveSpeed.value += (Math.random() * 2 - 1) * randomizeStrength;
+
+        // create resistance at mouse pointer
+        resistancePointX.value = float(event.offsetX).sub(limitX);
+        resistancePointY.value = float(event.offsetY).sub(limitY);
+    })
 
     // camera and scene
     scene = new THREE.Scene();
@@ -64,8 +92,8 @@ async function initScene() {
 
     for (let count = 0; count < agentCount; count++) {
         const startIndex = count * 4;
-        agentPositionAngleData[startIndex] = 0;
-        agentPositionAngleData[startIndex + 1] = 0;
+        agentPositionAngleData[startIndex] = Math.random() * textureWidth * 2 - textureWidth;
+        agentPositionAngleData[startIndex + 1] = Math.random() * textureHeight * 2 - textureHeight;
         agentPositionAngleData[startIndex + 2] = Math.random() * Math.PI * 2;
         agentPositionAngleData[startIndex + 3] = 0;
     }
@@ -105,7 +133,7 @@ async function initScene() {
     material.colorNode = color(0xFFFFFF00);
 
     material.positionNode = vec3(agentStorage.element(vertexIndex).xy, 0.0);
-    material.size = 5;
+    material.size = 1;
 
     const agents = new THREE.Points(agentGeometry, material);
     scene.add(agents);
@@ -119,6 +147,7 @@ async function initScene() {
     renderer = new THREE.WebGPURenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(width, height);
+    renderer.domElement.classList.add("background-canvas");
     document.body.appendChild(renderer.domElement);
 
     onWindowResize();
@@ -138,8 +167,6 @@ function agentTSL() {
         const limit = ivec2(int(resolution.x).sub(1), int(resolution.y).sub(1));
 
         const senseAhead = (senseAngleOffset) => {
-            const sensorOffsetDistance = float(30);
-            const sensorSize = float(5);
             const sensorAngle = agentStorage.element(instanceIndex).z.add(senseAngleOffset);
             const senseDir = vec2(cos(sensorAngle), sin(sensorAngle));
 
@@ -182,9 +209,7 @@ function agentTSL() {
             return sum;
         }
         
-        const turnSpeed = float(.5).mul(TWO_PI);
         const randomTurnStrength = hash(instanceIndex.add(time)).mul(2).sub(1);
-        const sensorAngleOffset = float(PI.div(2));
         const weightForward = senseAhead(0.0);
         const weightLeft = senseAhead(sensorAngleOffset);
         const weightRight = senseAhead(sensorAngleOffset.negate());
@@ -192,16 +217,18 @@ function agentTSL() {
         If(and(weightForward.greaterThan(weightLeft), weightForward.greaterThan(weightRight)), () => {
             agentStorage.element(instanceIndex).z.addAssign(0.0);
         }).ElseIf(and(weightForward.lessThan(weightLeft), weightForward.lessThan(weightRight)), () => {
-            agentStorage.element(instanceIndex).z.addAssign(randomTurnStrength.sub(0.5).mul(10).mul(turnSpeed));
+            agentStorage.element(instanceIndex).z.addAssign(randomTurnStrength.sub(0.5).mul(turnSpeed).mul(TWO_PI).mul(deltaTime));
         }).ElseIf(weightForward.greaterThan(weightLeft), () => {
-            agentStorage.element(instanceIndex).z.subAssign(randomTurnStrength.mul(turnSpeed));
+            agentStorage.element(instanceIndex).z.subAssign(randomTurnStrength.mul(turnSpeed).mul(deltaTime));
         }).ElseIf(weightForward.greaterThan(weightRight), () => {
-            agentStorage.element(instanceIndex).z.addAssign(randomTurnStrength.mul(turnSpeed));
+            agentStorage.element(instanceIndex).z.addAssign(randomTurnStrength.mul(turnSpeed).mul(deltaTime));
         })
 
-        const moveSpeed = float(1);
-        const newPositionY = position.y.add(sin(agentStorage.element(instanceIndex).z).mul(moveSpeed)).toVar();
-        const newPositionX = position.x.add(cos(agentStorage.element(instanceIndex).z).mul(moveSpeed)).toVar();
+        const newPositionY = position.y.add(sin(agentStorage.element(instanceIndex).z).mul(moveSpeed).mul(deltaTime)).toVar();
+        const newPositionX = position.x.add(cos(agentStorage.element(instanceIndex).z).mul(moveSpeed).mul(deltaTime)).toVar();
+
+
+        
         const didHit = float(0).toVar();
         const targetAngle = float(0).toVar();
 
@@ -237,7 +264,7 @@ function agentTSL() {
 
         // write to trail
         const trailCoords = ivec2(int(position.x.add(limitX)), int(position.y.add(limitY)));
-        textureStore(writeTexture, trailCoords, vec4(0,1,1,1));
+        textureStore(writeTexture, trailCoords, trailColor);
     });
 
     return agentComputeTask;
@@ -268,7 +295,7 @@ function fadeAndDiffuseTSL() {
             .add(getVal(ivec2(-1, 1)))
             .add(getVal(ivec2(1, 1)));
 
-        const averageFadeAndDiffuse = sum.div(9).mul(0.99);
+        const averageFadeAndDiffuse = sum.div(9).mul(diffuseFactor);
 
         textureStore(writeTexture, center, averageFadeAndDiffuse)
     })
