@@ -19,41 +19,52 @@ import {
     vertexIndex,
     sin,
     cos,
-    pow,
-    sqrt,
+    pow2,
+    pow3,
     PI,
     TWO_PI,
     hash,
     uniform,
     time,
     deltaTime,
-    dot
+    dot,
 } from 'three/tsl';
 
 let renderer, scene, camera, backgroundNode;
 let agentStorage;
 let trailMapWriteTarget, trailMapReadTarget;
 let trailMap, agentComputeNode, fadeAndDiffuseComputeNode;
-
-const agentCount = 10_000;
-const randomizeStrength = 4;
 let width = window.innerWidth;
 let height = window.innerHeight;
 
+const agentCount = 10_000;
 const textureWidth = width / 4;
 const textureHeight = height / 4;
+
+// modifiable params min/max
+const sensorOffsetDistanceMin = 5.0;
+const sensorOffsetDistanceMax = 20.0;
+const sensorAngleOffsetMin = Math.PI / 6;
+const sensorAngleOffsetMax = Math.PI / 2;
+const sensorSizeMin = 2.0;
+const sensorSizeMax = 6.0;
+const turnSpeedMin = 6.0;
+const turnSpeedMax = 10.0;
+const moveSpeedMin = 5.0;
+const moveSpeedMax = 30.0;
+
 const resolution = uniform(vec2(textureWidth, textureHeight));
 const limitX = uniform(textureWidth / 2); 
 const limitY = uniform(textureHeight / 2);
 const sensorOffsetDistance = uniform(10.0);
-const sensorSize = uniform(2.0);
+const sensorSize = uniform(4.0);
 const turnSpeed = uniform(8);
 const sensorAngleOffset = uniform(Math.PI / 3);
 const moveSpeed = uniform(10);
 
 const resistancePointX = uniform(0);
 const resistancePointY = uniform(0);
-const resistanceRadius = uniform(5);
+const resistanceRadius = uniform(10);
 
 const trailColor = uniform(new THREE.Color(Math.random() / 2, Math.random() / 2, Math.random() / 2, 1));
 const diffuseFactor = uniform(0.97);
@@ -64,14 +75,13 @@ async function initScene() {
 
     // randomize trail color onclick
     document.body.addEventListener('click', (event) => {
-        trailColor.value = new THREE.Color(Math.random() / 2, Math.random() / 2, Math.random() / 2, 1);
-        sensorOffsetDistance.value += (Math.random() * 2 - 1) * randomizeStrength;
-        turnSpeed.value += (Math.random() * 2 - 1) * randomizeStrength;
-        moveSpeed.value += (Math.random() * 2 - 1) * randomizeStrength;
+        randomizeUniforms();
 
         // create resistance at mouse pointer
-        resistancePointX.value = float(event.offsetX).sub(limitX);
-        resistancePointY.value = float(event.offsetY).sub(limitY);
+        resistancePointX.value = (event.offsetX) / 4 - limitX.value;
+        resistancePointY.value = (height - event.offsetY) / 4 - limitY.value;
+        console.log(resistancePointX.value);
+        console.log(resistancePointY.value);
     })
 
     // camera and scene
@@ -150,6 +160,7 @@ async function initScene() {
     renderer.domElement.classList.add("background-canvas");
     document.body.appendChild(renderer.domElement);
 
+    randomizeUniforms()
     onWindowResize();
     agentComputeNode = agentTSL();
     fadeAndDiffuseComputeNode = fadeAndDiffuseTSL();
@@ -227,28 +238,45 @@ function agentTSL() {
         const newPositionY = position.y.add(sin(agentStorage.element(instanceIndex).z).mul(moveSpeed).mul(deltaTime)).toVar();
         const newPositionX = position.x.add(cos(agentStorage.element(instanceIndex).z).mul(moveSpeed).mul(deltaTime)).toVar();
 
+        // modify position based on resistance point
+        const newPos = vec2(newPositionX, newPositionY).toVar();
+        const resistancePoint = vec2(resistancePointX, resistancePointY);
+        const dist = newPos.distance(resistancePoint);
+        const dir = newPos.sub(resistancePoint).normalize();
 
+        If(dist.lessThan(pow2(resistanceRadius)), () => {
+            
+            const proximity = dist.saturate();
+            const pushChance = pow3(proximity);
+
+            const rand = hash(instanceIndex.add(time));
+
+            If(rand.lessThan(pushChance), () => {
+                newPositionX.addAssign(dir.x.mul(moveSpeed));
+                newPositionY.addAssign(dir.y.mul(moveSpeed));
+            })
+        })
         
         const didHit = float(0).toVar();
         const targetAngle = float(0).toVar();
 
         If(newPositionX.greaterThan(limitX), () => {
-            newPositionX.assign(newPositionX.sub(0.5));
+            newPositionX.assign(limitX.sub(0.5));
             targetAngle.assign(PI);
             didHit.assign(1);
         })
         If(newPositionX.lessThan(limitX.negate()), () => {
-            newPositionX.assign(newPositionX.add(0.5));
+            newPositionX.assign(limitX.negate().add(0.5));
             targetAngle.assign(0);
             didHit.assign(1);
         })
         If(newPositionY.greaterThan(limitY), () => {
-            newPositionY.assign(newPositionY.sub(0.5));
+            newPositionY.assign(limitY.sub(0.5));
             targetAngle.assign(PI.div(2).negate());
             didHit.assign(1);
         })
         If(newPositionY.lessThan(limitY.negate()), () => {
-            newPositionY.assign(newPositionY.add(0.5));
+            newPositionY.assign(limitY.negate().add(0.5));
             targetAngle.assign(PI.div(2));
             didHit.assign(1);
         })
@@ -304,13 +332,25 @@ function fadeAndDiffuseTSL() {
 }
 
 
+function randomizeUniforms() {
+    trailColor.value = new THREE.Color(Math.random() / 2, Math.random() / 2, Math.random() / 2, 1);
+
+    const getRandVal = (max, min) => {
+        return Math.random() * (max - min) + min
+    }
+    sensorOffsetDistance.value = getRandVal(sensorOffsetDistanceMax, sensorOffsetDistanceMin);
+    sensorAngleOffset.value = getRandVal(sensorAngleOffsetMax, sensorAngleOffsetMin);
+    turnSpeed.value = getRandVal(turnSpeedMax, turnSpeedMin);
+    moveSpeed.value = getRandVal(moveSpeedMax, moveSpeedMin);
+    sensorSize.value = getRandVal(sensorSizeMax, sensorSizeMin);
+}
+
+
 function onWindowResize() {
 
     // TODO fix resize issue with texture (texture must be resized instead of because shader references new width and height)
     width = window.innerWidth;
     height = window.innerHeight;
-
-
 
     if (camera) {
         camera.left = -width / 2;

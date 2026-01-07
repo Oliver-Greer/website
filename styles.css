@@ -1,8 +1,7 @@
 :root {
-    color-scheme: light dark;
-    --background-color: light-dark(#f0f0f0, #4d4d4d);
-    --text-color: light-dark(#000000, #9969b4);
-    --accent-color: light-dark(#a1d4e9, #452f52);
+    --background-color: #4b4b4b;
+    --text-color: #9969b4;
+    --accent-color: #452f52;
 }
 
 body, html {
@@ -12,7 +11,7 @@ body, html {
 }
 
 .background-canvas {
-    filter: opacity(75%) blur(15px);
+    filter: opacity(100%) blur(10px) contrast(75%);
 }
 
 body {
