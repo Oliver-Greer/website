@@ -37,7 +37,8 @@ let trailMap, agentComputeNode, fadeAndDiffuseComputeNode;
 let width = window.innerWidth;
 let height = window.innerHeight;
 
-const agentCount = 10_000;
+// agent count must be multiple of 64 for GPU thread dispatch
+const agentCount = 10_048;
 const textureWidth = width / 4;
 const textureHeight = height / 4;
 
@@ -246,7 +247,7 @@ function agentTSL() {
 
         If(dist.lessThan(pow2(resistanceRadius)), () => {
             
-            const proximity = dist.saturate();
+            const proximity = dist.div(resistanceRadius).saturate();
             const pushChance = pow3(proximity);
 
             const rand = hash(instanceIndex.add(time));
