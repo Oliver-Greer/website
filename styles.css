@@ -11,7 +11,7 @@ body, html {
 }
 
 .background-canvas {
-    filter: opacity(100%) blur(10px) contrast(75%);
+    filter: opacity(100%) blur(0px) contrast(75%);
 }
 
 body {

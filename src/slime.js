@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { 
+import {
     textureStore,
     texture,
     int,
@@ -20,7 +20,6 @@ import {
     sin,
     cos,
     pow2,
-    pow3,
     PI,
     TWO_PI,
     hash,
@@ -38,21 +37,21 @@ let width = window.innerWidth;
 let height = window.innerHeight;
 
 // agent count must be multiple of 64 for GPU thread dispatch
-const agentCount = 10_048;
-const textureWidth = width / 4;
-const textureHeight = height / 4;
+const agentCount = 100_032;
+const textureWidth = width / 2;
+const textureHeight = height / 2;
 
 // modifiable params min/max
-const sensorOffsetDistanceMin = 5.0;
-const sensorOffsetDistanceMax = 20.0;
+const sensorOffsetDistanceMin = 10.0;
+const sensorOffsetDistanceMax = 50.0;
 const sensorAngleOffsetMin = Math.PI / 6;
 const sensorAngleOffsetMax = Math.PI / 2;
 const sensorSizeMin = 2.0;
-const sensorSizeMax = 6.0;
+const sensorSizeMax = 10.0;
 const turnSpeedMin = 6.0;
 const turnSpeedMax = 10.0;
-const moveSpeedMin = 5.0;
-const moveSpeedMax = 30.0;
+const moveSpeedMin = 30.0;
+const moveSpeedMax = 50.0;
 
 const resolution = uniform(vec2(textureWidth, textureHeight));
 const limitX = uniform(textureWidth / 2); 
@@ -79,10 +78,8 @@ async function initScene() {
         randomizeUniforms();
 
         // create resistance at mouse pointer
-        resistancePointX.value = (event.offsetX) / 4 - limitX.value;
-        resistancePointY.value = (height - event.offsetY) / 4 - limitY.value;
-        console.log(resistancePointX.value);
-        console.log(resistancePointY.value);
+        resistancePointX.value = (event.offsetX) / 2 - limitX.value;
+        resistancePointY.value = (height - event.offsetY) / 2 - limitY.value;
     })
 
     // camera and scene
@@ -247,15 +244,8 @@ function agentTSL() {
 
         If(dist.lessThan(pow2(resistanceRadius)), () => {
             
-            const proximity = dist.div(resistanceRadius).saturate();
-            const pushChance = pow3(proximity);
-
-            const rand = hash(instanceIndex.add(time));
-
-            If(rand.lessThan(pushChance), () => {
-                newPositionX.addAssign(dir.x.mul(moveSpeed));
-                newPositionY.addAssign(dir.y.mul(moveSpeed));
-            })
+            newPositionX.addAssign(dir.x.mul(moveSpeed));
+            newPositionY.addAssign(dir.y.mul(moveSpeed));
         })
         
         const didHit = float(0).toVar();
@@ -349,7 +339,7 @@ function randomizeUniforms() {
 
 function onWindowResize() {
 
-    // TODO fix resize issue with texture (texture must be resized instead of because shader references new width and height)
+    // TODO fix resize issue with texture (texture must be resized)
     width = window.innerWidth;
     height = window.innerHeight;
 
