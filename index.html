@@ -2,20 +2,40 @@
 <html lang="en-US">
     <head>
         <meta charset="utf-8" />
-        <title>Slime</title>
-        <link rel="stylesheet" href="/styles.css">
-        <script type="importmap">
-        {
-            "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.webgpu.js",
-            "three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.webgpu.js",
-            "three/tsl": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.tsl.js",
-            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/"
-            }
-        }
+        <title>Oliver Greer</title>
+        <link rel="stylesheet" href="/css/styles.css">
         </script>
     </head>
     <body>
-         <script src="/src/slime.js" type="module"></script>
+        <div class="global-container">
+            <h1>Oliver Greer</h1>
+            <div class="description-image-container">
+                <img class="profile-pic" src="/images/profilePicture.jpg">
+                <div class="desciption-container">
+                    <h2>Hi, </h2>
+                    <h2>I'm an Electrical Engineering & Computer Science student at UC Berkeley. 
+                        The purpose of this page to to display whatever random subject has caught my interest, and more importantly, to motivate me to continue learning. 
+                        It will be updated periodically with my whatever I'm working on or simply whatever catches my interest.
+                    </h2>
+                </div>
+            </div>
+            <div>
+                <h1>Projects</h1>
+                <div class="project-slime">
+                    <div class="description-image-container">
+                        <img class="slime-pic" src="/images/slime.png">
+                        <div class="desciption-container">
+                            <h2 class="project-title"><a href="/slime.html">Agent-Based Slime Mold Simulation</a></h2>
+                            <h3>Inspired by <a href="https://github.com/SebLague/Slime-Simulation">Sebastian Lague's Unity slime mold simulation,</a> 
+                                this is an agent-based slime mold simulation written entirely in Javascript.
+                                The simulation uses Three js's new compute shader language TSL which relies on relatively new WebGPU features for parallel computation.
+                                For this reason I recommend using Chrome's newest version to load it, as some browsers don't natively support WebGPU yet (looking at you Firefox).
+                                I also recommend using a computer with a decent graphics card, as even with compute shaders simulating 1 million agents isn't a joke!
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

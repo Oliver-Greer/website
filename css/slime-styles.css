@@ -1,0 +1,49 @@
+:root {
+    --background-color: #4b4b4b;
+    --text-color: #9969b4;
+    --accent-color: #452f52;
+}
+
+body, html {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    position: fixed;
+}
+
+.text-container {
+    margin: 5px;
+    font-size: 1.5em;
+    background-color: white;
+    width: 400px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 10;
+}
+
+a {
+    margin: auto;
+    text-align: center;
+}
+
+.child-text-container {
+    position: relative;
+}
+
+p {
+    margin: auto;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.background-canvas {
+    filter: blur(3px);
+    position: relative;
+    z-index: 5;
+}

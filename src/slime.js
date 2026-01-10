@@ -37,21 +37,21 @@ let width = window.innerWidth;
 let height = window.innerHeight;
 
 // agent count must be multiple of 64 for GPU thread dispatch
-const agentCount = 100_032;
-const textureWidth = width / 2;
-const textureHeight = height / 2;
+const agentCount = 500_032;
+const textureWidth = width;
+const textureHeight = height;
 
 // modifiable params min/max
 const sensorOffsetDistanceMin = 10.0;
-const sensorOffsetDistanceMax = 50.0;
+const sensorOffsetDistanceMax = 100.0;
 const sensorAngleOffsetMin = Math.PI / 6;
-const sensorAngleOffsetMax = Math.PI / 2;
+const sensorAngleOffsetMax = Math.PI;
 const sensorSizeMin = 2.0;
-const sensorSizeMax = 10.0;
+const sensorSizeMax = 4.0;
 const turnSpeedMin = 6.0;
 const turnSpeedMax = 10.0;
-const moveSpeedMin = 30.0;
-const moveSpeedMax = 50.0;
+const moveSpeedMin = 50.0;
+const moveSpeedMax = 100.0;
 
 const resolution = uniform(vec2(textureWidth, textureHeight));
 const limitX = uniform(textureWidth / 2); 
@@ -78,8 +78,8 @@ async function initScene() {
         randomizeUniforms();
 
         // create resistance at mouse pointer
-        resistancePointX.value = (event.offsetX) / 2 - limitX.value;
-        resistancePointY.value = (height - event.offsetY) / 2 - limitY.value;
+        resistancePointX.value = (event.offsetX) - limitX.value;
+        resistancePointY.value = (height - event.offsetY) - limitY.value;
     })
 
     // camera and scene
@@ -156,7 +156,9 @@ async function initScene() {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(width, height);
     renderer.domElement.classList.add("background-canvas");
-    document.body.appendChild(renderer.domElement);
+
+    const parentElement = document.getElementById('container');
+    parentElement.append(renderer.domElement);
 
     randomizeUniforms()
     onWindowResize();
