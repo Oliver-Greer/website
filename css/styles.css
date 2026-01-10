@@ -39,6 +39,11 @@ h1 {
     height: 300px;
 }
 
+.nn-pic {
+    margin-right: 50px;
+    height: 300px;
+}
+
 .description-image-container {
     padding: 40px;
     display: flex;
