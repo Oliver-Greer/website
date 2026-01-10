@@ -1,5 +1,5 @@
 :root {
-    --background-color: #4b4b4b;
+    --background-color: #d3d3d3;
     --text-color: #9969b4;
     --accent-color: #452f52;
 }
@@ -17,7 +17,7 @@ body, html {
 .text-container {
     margin: 5px;
     font-size: 1.5em;
-    background-color: white;
+    background-color: var(--background-color);
     width: 400px;
     height: 100px;
     display: flex;
@@ -43,7 +43,7 @@ p {
 }
 
 .background-canvas {
-    filter: blur(3px);
+    filter: blur(2px) contrast(200%);
     position: relative;
     z-index: 5;
 }

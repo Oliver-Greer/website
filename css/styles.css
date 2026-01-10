@@ -1,7 +1,7 @@
 :root {
-    --background-color: #d3d3d3;
-    --text-color: #9969b4;
-    --accent-color: #452f52;
+    --background-color: #c0c0c0;
+    --text-color: #00709c;
+    --accent-color: #c2c2c2;
 }
 
 body, html {
@@ -9,11 +9,13 @@ body, html {
     height: 100vh;
     margin: 0;
     padding: 0;
+    color: var(--text-color);
 }
 
 .global-container {
     display: flex;
     flex-direction: column;
+    background-color: var(--accent-color);
 }
 
 h1 {
