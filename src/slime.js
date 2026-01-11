@@ -73,7 +73,7 @@ initScene();
 
 async function initScene() {
 
-    // randomize trail color onclick
+    // randomize trail color on click
     document.body.addEventListener('click', (event) => {
         randomizeUniforms();
 
@@ -177,6 +177,7 @@ function agentTSL() {
         const position = agentStorage.element(instanceIndex).xy;
         const limit = ivec2(int(resolution.x).sub(1), int(resolution.y).sub(1));
 
+        // this is used to sense ahead of the agent at 3 places. Returns the sum of those texture pixel values.
         const senseAhead = (senseAngleOffset) => {
             const sensorAngle = agentStorage.element(instanceIndex).z.add(senseAngleOffset);
             const senseDir = vec2(cos(sensorAngle), sin(sensorAngle));
@@ -225,8 +226,10 @@ function agentTSL() {
         const weightLeft = senseAhead(sensorAngleOffset);
         const weightRight = senseAhead(sensorAngleOffset.negate());
 
+        // if straight ahead is a more intense trail, dont modify agent angle
         If(and(weightForward.greaterThan(weightLeft), weightForward.greaterThan(weightRight)), () => {
             agentStorage.element(instanceIndex).z.addAssign(0.0);
+        // if straight ahead is less intense than both sides, turn randomly.
         }).ElseIf(and(weightForward.lessThan(weightLeft), weightForward.lessThan(weightRight)), () => {
             agentStorage.element(instanceIndex).z.addAssign(randomTurnStrength.sub(0.5).mul(turnSpeed).mul(TWO_PI).mul(deltaTime));
         }).ElseIf(weightForward.greaterThan(weightLeft), () => {
@@ -250,6 +253,7 @@ function agentTSL() {
             newPositionY.addAssign(dir.y.mul(moveSpeed));
         })
         
+        // check if the agent has hit a boundary
         const didHit = float(0).toVar();
         const targetAngle = float(0).toVar();
 
@@ -300,7 +304,7 @@ function fadeAndDiffuseTSL() {
         const center = ivec2(coordX, coordY);
 
         const limit = ivec2(int(resolution.x).sub(1), int(resolution.y).sub(1));
-        // values at 5 points
+        
         const getVal = (offset) => {
             const coord = center.add(offset).clamp(ivec2(0, 0), limit);
             return texture(readTexture).load(coord);
@@ -316,6 +320,7 @@ function fadeAndDiffuseTSL() {
             .add(getVal(ivec2(-1, 1)))
             .add(getVal(ivec2(1, 1)));
 
+        // simple box blur
         const averageFadeAndDiffuse = sum.div(9).mul(diffuseFactor);
 
         textureStore(writeTexture, center, averageFadeAndDiffuse)
@@ -341,7 +346,9 @@ function randomizeUniforms() {
 
 function onWindowResize() {
 
-    // TODO fix resize issue with texture (texture must be resized)
+    // NOTE: Doesn't properly resize the texture component, 
+    // not sure how to fix this other than copying data over to a new one every time the window is resized.
+    // That seems expensive even done in parallel.
     width = window.innerWidth;
     height = window.innerHeight;
 

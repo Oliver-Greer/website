@@ -34,12 +34,7 @@ h1 {
     height: 200px;
 }
 
-.slime-pic {
-    margin-right: 50px;
-    height: 300px;
-}
-
-.nn-pic {
+.project-pic {
     margin-right: 50px;
     height: 300px;
 }
@@ -59,7 +54,7 @@ h1 {
     margin: auto;
 }
 
-.project-slime {
+.project {
     display: flex;
     text-align: left;
     margin: auto;

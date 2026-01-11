@@ -19,35 +19,60 @@
                 </div>
             </div>
             <div>
-                <h1>Projects</h1>
-                <div class="project-slime">
+                <h1>In-Progress Projects:</h1>
+                <div class="project">
                     <div class="description-image-container">
-                        <img class="slime-pic" src="/images/slime.png">
+                        <img class="project-pic" src="/images/country-view.png">
                         <div class="desciption-container">
-                            <h2 class="project-title"><a href="/slime.html">Agent-Based Slime Mold Simulation</a></h2>
-                            <h3>Inspired by <a href="https://github.com/SebLague/Slime-Simulation">Sebastian Lague's Unity slime mold simulation,</a> 
-                                this is an agent-based slime mold simulation written entirely in Javascript.
-                                The simulation uses Three js's new compute shader language TSL which relies on relatively new WebGPU features for parallel computation.
-                                For this reason I recommend using Chrome's newest version to load it, as some browsers don't natively support WebGPU yet (looking at you Firefox).
-                                I also recommend using a computer with a decent graphics card, as even with compute shaders simulating 1 million agents isn't a joke!
-                            </h3>
+                            <h2 class="project-title"><a href="https://country-view-474417.web.app/">Web App For Viewing State Representatives</a></h2>
+                            <b>
+                                Thought it was about time I tried my hand at a full-stack React/Typescript App, and it has proved to be a great learning experience.
+                                I'm hosting this one in Firebase for the generous free tier, and although I could easily have done my api requests through server side functions,
+                                I decided to go with a seperate containerized serverless method instead (for the learning experience). 
+                                Because I already chose Firebase for the frontend, Google Cloud Run was the obvious choice. 
+                                For the api framework I went with FastAPI because, well, it's fast.
+                                I also used this as an opportunity to learn about CI/CD pipelines and proper automated testing, so I incorporated Google Cloud Build 
+                                and seperate development/production builds.
+                                I still need to integrate Firestore with the app so that the representatives are actually displayed.
+                                See the full source code <a href="https://github.com/Oliver-Greer/Country-View">here.</a>
+                                Side note: I found <a href="https://www.roadtoreact.com/">The Road to React</a> to be an incredible learning resource for this, 
+                                and I highly suggest it to anyone who wants to start learning React. 
+                            </b>
                         </div>
                     </div>
                 </div>
-                <div class="project-NN-trainer">
+            <div>
+                <h1>Completed Projects:</h1>
+                <div class="project">
                     <div class="description-image-container">
-                        <img class="nn-pic" src="/images/neural_network.png">
+                        <img class="project-pic" src="/images/slime.png">
+                        <div class="desciption-container">
+                            <h2 class="project-title"><a href="/slime.html">Agent-Based Slime Mold Simulation</a></h2>
+                            <b>
+                                Inspired by <a href="https://github.com/SebLague/Slime-Simulation">Sebastian Lague's Unity slime mold simulation,</a> 
+                                this is an agent-based slime mold simulation written entirely in Javascript.
+                                The simulation uses Three js's new compute shader language TSL which relies on relatively new WebGPU features for parallel computation.
+                                For this reason I recommend using Chrome's newest version to load it, as some browsers don't natively support WebGPU yet (looking at you Firefox).
+                                I also recommend using a computer with a decent graphics card, as even with compute shaders simulating 1 million agents is no joke! 
+                                See the full script <a href="https://github.com/Oliver-Greer/website/blob/main/src/slime.js">here.</a>
+                            </b>
+                        </div>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="description-image-container">
+                        <img class="project-pic" src="/images/neural_network.png">
                         <div class="desciption-container">
                             <h2 class="project-title"><a href="https://github.com/Oliver-Greer/neural-network-training-visualizer">Neural Network Training Visualizer</a></h2></h2>
-                            <h3>
+                            <b>
                                 I created a neural network from scratch that classifies randomly generated data points using only Java.
                                 It's a basic feed-forward network, without any optimizers and only dense fully-connected layers.
                                 I used JavaFX to create a simple 3D UI where one can view the training process and modify the network parameters. 
-                                My hope is that this helps other people better intuitively understand how different parameters effect the efficacy of network training.
+                                My hope is that this helps other people better intuitively understand how different parameters affect the efficacy of network training.
                                 To try it out, <a href="/src/NeuralNetwork.jar" download>download the Jar executable</a>, download and install the 
                                 <a href="https://bell-sw.com/pages/downloads/#jdk-21-lts">Liberica Full JDK 21</a> then run <pre><code>java -jar .\NeuralNetwork.jar</code></pre> 
-                                in the same directory.
-                            </h3>
+                                in the same directory. Alternatively you can clone my Github repo and run it in IntelliJ IDEA.
+                            </b>
                         </div>
                     </div>
                 </div>
