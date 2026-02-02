@@ -1,6 +1,7 @@
 /* Define color palette */
 :root {
     --background-color: #f3f3f3;
+    --accent-color: #AE093D;
     --card-color: rgb(from var(--background-color) 
                         calc(max(0, r - var(--card-smoothing))) 
                         calc(max(0, g - var(--card-smoothing))) 
@@ -14,7 +15,6 @@
                         calc(max(0, b - var(--smoothing))) 
                         / alpha
                     );
-    --accent-color: #AE093D;
     --smoothing: 5;
     --card-smoothing: 5;
     --base-font-size: 1.15rem;
@@ -36,6 +36,8 @@ body {
 header {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
+    /*For older versions of Safari that dont support from*/
+    background-color: var(--accent-color);
     background-image: 
         linear-gradient(to bottom, var(--accent-color), 
                             var(--text-color)
@@ -95,6 +97,8 @@ hr {
 }
 
 section {
+    /*For older versions of Safari that dont support from*/
+    background-color: var(--card-color);
     background-image: 
         linear-gradient(to bottom, var(--card-color), 
                             rgb(from var(--card-color) 
@@ -162,6 +166,8 @@ main a:visited {
 footer {
     margin-top: 5rem;
     padding: 0.5rem;
+    /*For older versions of Safari that dont support from*/
+    background-color: var(--accent-color);
     background-image: 
         linear-gradient(to top, var(--accent-color), 
                             var(--text-color)
