@@ -17,11 +17,12 @@
     --accent-color: #AE093D;
     --smoothing: 5;
     --card-smoothing: 5;
-    --base-font-size: 1.25rem;
+    --base-font-size: 1.15rem;
 }
 
 html{
-   scroll-behavior: smooth
+   scroll-behavior: smooth;
+   font-size: var(--base-font-size);
 }
 
 body {
@@ -41,6 +42,7 @@ header {
                     );
     position: sticky;
     top: 0;
+    left: 0;
     z-index: 10;
     width: 100%;
 }
@@ -156,14 +158,6 @@ main a:visited {
     display: flex;
     flex-direction: column;
 }
-
-.logo {
-    background-color: var(--card-color);
-    height: 1.25rem;
-    background-color: rgb(0, 0, 0, \ 0);
-    margin: auto;
-}
-
 
 footer {
     margin-top: 5rem;
