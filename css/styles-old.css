@@ -1,0 +1,61 @@
+:root {
+    --background-color: #ffffff;
+    --text-color: #00709c;
+    --accent-color: #c2c2c2;
+}
+
+body, html {
+    background-color: var(--background-color);
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+}
+
+.global-container {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--accent-color);
+}
+
+h1 {
+    font-size: 6em;
+    text-align: center;
+}
+
+.project-title {
+    font-size: 2em;
+}
+
+.profile-pic {
+    margin-right: 50px;
+    border-radius: 90%;
+    width: 200px;
+    height: 200px;
+}
+
+.project-pic {
+    margin-right: 50px;
+    height: 300px;
+}
+
+.description-image-container {
+    padding: 40px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: space-between;
+    width: 75vw;
+}
+
+.description-container {
+    display: flex;
+    text-align: left;
+    margin: auto;
+}
+
+.project {
+    display: flex;
+    text-align: left;
+    margin: auto;
+}
