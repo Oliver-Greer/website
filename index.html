@@ -4,97 +4,99 @@
         <meta charset="utf-8" />
         <title>Oliver Greer</title>
         <link rel="stylesheet" href="/css/styles.css">
-        </script>
     </head>
     <body>
-        <div class="global-container">
-            <h1>Hi, I'm Oliver</h1>
-            <div class="description-image-container">
-                <img class="profile-pic" src="/images/profilePicture.jpg">
-                <div class="desciption-container">
-                    <h2>I'm an Electrical Engineering & Computer Science student at UC Berkeley. 
-                        The purpose of this page to to display the various random subjects that have caught my interest over the years,
-                        and more importantly, to motivate me to continue learning. It will be updated periodically with what I'm working on at the moment. 
-                        Also, this site will hopefully get a bit prettier as time goes on, but for that I'll need to improve my CSS.
-                    </h2>
+        <main>
+            <div class="global-container">
+                <h1>Hi, I'm Oliver</h1>
+                <div class="description-image-container">
+                    <img class="profile-pic" src="/images/profilePicture.jpg">
+                    <div class="desciption-container">
+                        <h2>I'm an Electrical Engineering & Computer Science student at UC Berkeley. 
+                            The purpose of this page to to display the various random subjects that have caught my interest over the years,
+                            and more importantly, to motivate me to continue learning. It will be updated periodically with what I'm working on at the moment. 
+                            Also, this site will hopefully get a bit prettier as time goes on, but for that I'll need to improve my CSS.
+                        </h2>
+                    </div>
+                </div>
+                <div>
+                    <h1>In-Progress Projects:</h1>
+                    <div class="project">
+                        <div class="description-image-container">
+                            <img class="project-pic" src="/images/country-view.png">
+                            <div class="desciption-container">
+                                <h2 class="project-title"><a href="https://country-view-474417.web.app/">Web App For Viewing State Representatives</a></h2>
+                                <b>
+                                    Thought it was about time I tried my hand at a full-stack React/Typescript App, and it has proven to be a great learning experience.
+                                    I'm hosting this one in Firebase for the generous free tier, 
+                                    and although I could easily have done my backend api requests through server side functions,
+                                    I decided to go with a seperate containerized serverless method instead (for the learning experience). 
+                                    Because I already chose Firebase for the frontend, Google Cloud Run was the obvious choice. 
+                                    For the api framework I went with FastAPI because, well, it's fast.
+                                    I also used this as an opportunity to learn about CI/CD pipelines and proper automated testing, so I incorporated Google Cloud Build 
+                                    and seperate development/production builds.
+                                    I have more work to do on the styling side of things, and should definitely have more comprehensive testing, but the base functionality is there.
+                                    See the full source code <a href="https://github.com/Oliver-Greer/Country-View">here.</a>
+                                    Side note: I found <a href="https://www.roadtoreact.com/">The Road to React</a> to be an incredible learning resource for this, 
+                                    and I highly suggest it to anyone who wants to start learning React.
+                                </b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h1>Completed Projects:</h1>
+                    <div class="project">
+                        <div class="description-image-container">
+                            <img class="project-pic" src="/images/slime.png">
+                            <div class="desciption-container">
+                                <h2 class="project-title"><a href="/slime.html">Agent-Based Slime Mold Simulation</a></h2>
+                                <b>
+                                    Inspired by <a href="https://github.com/SebLague/Slime-Simulation">Sebastian Lague's Unity slime mold simulation,</a> 
+                                    this is an agent-based slime mold simulation written entirely in Javascript.
+                                    The simulation uses Three js's new compute shader language TSL which relies on relatively new WebGPU features for parallel computation.
+                                    For this reason I recommend using Chrome's newest version to load it, as some browsers don't natively support WebGPU yet (looking at you Firefox).
+                                    I also recommend using a computer with a decent graphics card, as even with compute shaders simulating 1 million agents is no joke! 
+                                    See the full script <a href="https://github.com/Oliver-Greer/website/blob/main/src/slime.js">here.</a>
+                                </b>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project">
+                        <div class="description-image-container">
+                            <img class="project-pic" src="/images/neural_network.png">
+                            <div class="desciption-container">
+                                <h2 class="project-title"><a href="https://github.com/Oliver-Greer/neural-network-training-visualizer">Neural Network Training Visualizer</a></h2>
+                                <b>
+                                    I created a neural network from scratch that classifies randomly generated data points using only Java.
+                                    It's a basic feed-forward network, without any optimizers and only dense fully-connected layers.
+                                    I used JavaFX to create a simple 3D UI where one can view the training process and modify the network parameters. 
+                                    My hope is that this helps other people better intuitively understand how different parameters affect the efficacy of network training.
+                                    To try it out, <a href="/src/NeuralNetwork.jar" download>download the Jar executable</a>, download and install the 
+                                    <a href="https://bell-sw.com/pages/downloads/#jdk-21-lts">Liberica Full JDK 21</a> then run <pre><code>java -jar .\NeuralNetwork.jar</code></pre> 
+                                    in the same directory. Alternatively you can clone my Github repo and run it in IntelliJ IDEA.
+                                </b>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project">
+                        <div class="description-image-container">
+                            <img class="project-pic" src="/images/game.png">
+                            <div class="desciption-container">
+                                <h2 class="project-title">Unity Game Jam Game</h2>
+                                <b>
+                                    Like many kids, I first got into programming through my desire to make games. 
+                                    It was only natural then that as I became more ambitious I would transition from simple pygame scripts to a game engine.
+                                    This is a project from when I was a teenager that a friend of mine (<a href="https://samleavitt.carrd.co/">who is now an artist</a>) 
+                                    and I made for a Unity Game Jam. I've lost the source code by now, 
+                                    but I've included the Windows executable for download <a href="src/UnityPlayer.zip" download>here.</a> It's goofy, but moderately fun even today. 
+                                    My interests have long moved on from game design, but at the time it was an accessible, satisfying way to learn OOP principles.
+                                </b>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div>
-                <h1>In-Progress Projects:</h1>
-                <div class="project">
-                    <div class="description-image-container">
-                        <img class="project-pic" src="/images/country-view.png">
-                        <div class="desciption-container">
-                            <h2 class="project-title"><a href="https://country-view-474417.web.app/">Web App For Viewing State Representatives</a></h2>
-                            <b>
-                                Thought it was about time I tried my hand at a full-stack React/Typescript App, and it has proven to be a great learning experience.
-                                I'm hosting this one in Firebase for the generous free tier, 
-                                and although I could easily have done my backend api requests through server side functions,
-                                I decided to go with a seperate containerized serverless method instead (for the learning experience). 
-                                Because I already chose Firebase for the frontend, Google Cloud Run was the obvious choice. 
-                                For the api framework I went with FastAPI because, well, it's fast.
-                                I also used this as an opportunity to learn about CI/CD pipelines and proper automated testing, so I incorporated Google Cloud Build 
-                                and seperate development/production builds.
-                                I have more work to do on the styling side of things, and should definitely have more comprehensive testing, but the base functionality is there.
-                                See the full source code <a href="https://github.com/Oliver-Greer/Country-View">here.</a>
-                                Side note: I found <a href="https://www.roadtoreact.com/">The Road to React</a> to be an incredible learning resource for this, 
-                                and I highly suggest it to anyone who wants to start learning React.
-                            </b>
-                        </div>
-                    </div>
-                </div>
-            <div>
-                <h1>Completed Projects:</h1>
-                <div class="project">
-                    <div class="description-image-container">
-                        <img class="project-pic" src="/images/slime.png">
-                        <div class="desciption-container">
-                            <h2 class="project-title"><a href="/slime.html">Agent-Based Slime Mold Simulation</a></h2>
-                            <b>
-                                Inspired by <a href="https://github.com/SebLague/Slime-Simulation">Sebastian Lague's Unity slime mold simulation,</a> 
-                                this is an agent-based slime mold simulation written entirely in Javascript.
-                                The simulation uses Three js's new compute shader language TSL which relies on relatively new WebGPU features for parallel computation.
-                                For this reason I recommend using Chrome's newest version to load it, as some browsers don't natively support WebGPU yet (looking at you Firefox).
-                                I also recommend using a computer with a decent graphics card, as even with compute shaders simulating 1 million agents is no joke! 
-                                See the full script <a href="https://github.com/Oliver-Greer/website/blob/main/src/slime.js">here.</a>
-                            </b>
-                        </div>
-                    </div>
-                </div>
-                <div class="project">
-                    <div class="description-image-container">
-                        <img class="project-pic" src="/images/neural_network.png">
-                        <div class="desciption-container">
-                            <h2 class="project-title"><a href="https://github.com/Oliver-Greer/neural-network-training-visualizer">Neural Network Training Visualizer</a></h2></h2>
-                            <b>
-                                I created a neural network from scratch that classifies randomly generated data points using only Java.
-                                It's a basic feed-forward network, without any optimizers and only dense fully-connected layers.
-                                I used JavaFX to create a simple 3D UI where one can view the training process and modify the network parameters. 
-                                My hope is that this helps other people better intuitively understand how different parameters affect the efficacy of network training.
-                                To try it out, <a href="/src/NeuralNetwork.jar" download>download the Jar executable</a>, download and install the 
-                                <a href="https://bell-sw.com/pages/downloads/#jdk-21-lts">Liberica Full JDK 21</a> then run <pre><code>java -jar .\NeuralNetwork.jar</code></pre> 
-                                in the same directory. Alternatively you can clone my Github repo and run it in IntelliJ IDEA.
-                            </b>
-                        </div>
-                    </div>
-                </div>
-                <div class="project">
-                    <div class="description-image-container">
-                        <img class="project-pic" src="/images/game.png">
-                        <div class="desciption-container">
-                            <h2 class="project-title">Unity Game Jam Game</h2></h2>
-                            <b>
-                                Like many kids, I first got into programming through my desire to make games. 
-                                It was only natural then that as I became more ambitious I would transition from simple pygame scripts to a game engine.
-                                This is a project from when I was a teenager that a friend of mine (<a href="https://samleavitt.carrd.co/">who is now an artist</a>) 
-                                and I made for a Unity Game Jam. I've lost the source code by now, 
-                                but I've included the Windows executable for download <a href="src/UnityPlayer.zip" download>here.</a> It's goofy, but moderately fun even today. 
-                                My interests have long moved on from game design, but at the time it was an accessible, satisfying way to learn OOP principles.
-                            </b>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </main>
     </body>
 </html>

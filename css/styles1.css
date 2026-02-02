@@ -1,0 +1,197 @@
+/* Define color palette */
+:root {
+    --background-color: #f3f3f3;
+    --card-color: rgb(from var(--background-color) 
+                        calc(r - var(--card-smoothing)) 
+                        calc(g - var(--card-smoothing)) 
+                        calc(g - var(--card-smoothing)) 
+                        / alpha
+                    );
+    --link-color: #f3f3f3;
+    --text-color: rgb(from var(--accent-color) 
+                        calc(r - var(--smoothing)) 
+                        calc(g - var(--smoothing)) 
+                        calc(g - var(--smoothing)) 
+                        / alpha
+                    );
+    --accent-color: #AE093D;
+    --smoothing: 1;
+    --card-smoothing: 5;
+    --base-font-size: 1.25rem;
+}
+
+html{
+   scroll-behavior: smooth
+}
+
+body {
+    background-color: var(--background-color);
+    font-family: Roboto, Tahoma, sans-serif;
+    line-height: 1.5;
+    font-size: var(--base-font-size);
+    hyphens: auto;
+}
+
+header {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    background-image: 
+        linear-gradient(to bottom, var(--accent-color), 
+                            rgb(from var(--accent-color) 
+                                calc(r - var(--smoothing)) 
+                                calc(g - var(--smoothing)) 
+                                calc(g - var(--smoothing)) 
+                                / alpha
+                            )
+                    );
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+}
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+nav > a {
+    color: var(--link-color);
+    text-decoration-color: var(--link-color);
+    font-size: 1.5rem;
+}
+
+nav > a:visited {
+    color: var(--link-color); 
+}
+
+a {
+    transition: transform 0.2s ease-in-out;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+nav > a:hover {
+    transform: scale(1.1);
+}
+
+main h2, h3, h4, p, span {
+    color: var(--text-color);
+    padding: 1rem;
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: center;
+}
+
+
+.page-content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+section {
+    background-image: 
+        linear-gradient(to bottom, var(--card-color), 
+                            rgb(from var(--card-color) 
+                                calc(r - var(--card-smoothing)) 
+                                calc(g - var(--card-smoothing)) 
+                                calc(g - var(--card-smoothing)) 
+                                / alpha
+                            )
+        );
+    border-radius: 15px;
+    box-shadow: 1px 1px 5px var(--accent-color);
+    scroll-margin-top: 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    padding: 1rem;
+    width: max(min(30rem, 80vw), 55%);
+    transition: background-image 4s ease-in-out;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+.about {
+    scroll-margin-top: 10rem;
+}
+
+section:hover {
+    background-image: 
+        linear-gradient(to top, var(--card-color), 
+                            rgb(from var(--card-color) 
+                                calc(r - var(--card-smoothing)) 
+                                calc(g - var(--card-smoothing)) 
+                                calc(g - var(--card-smoothing)) 
+                                / alpha
+                            )
+        );
+}
+
+.profile-pic {
+    border-radius: 50%;
+}
+
+main a {
+    text-decoration-color: var(--text-color);
+    color: var(--text-color);
+    margin: auto;
+    padding: 1rem;
+    text-align: center;
+}
+
+main a:visited {
+    color: var(--text-color)
+}
+
+.content-paragraph {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    background-color: var(--card-color);
+    height: 1.25rem;
+    background-color: rgb(0, 0, 0, \ 0);
+    margin: auto;
+    border-radius: 10px;
+}
+
+
+footer {
+    margin-top: 5rem;
+    padding: 0.5rem;
+    background-image: 
+        linear-gradient(to top, var(--accent-color), 
+                            rgb(from var(--accent-color) 
+                                calc(r - var(--smoothing)) 
+                                calc(g - var(--smoothing)) 
+                                calc(g - var(--smoothing)) 
+                                / alpha
+                            )
+                    );
+    bottom: 0;
+    position: fixed;
+    width: 100vw;
+    z-index: 10;
+    text-align: center;
+    font-size: var(--base-font-size);
+}
+
+.projects {
+    margin-bottom: 8rem;
+}
+
+footer > small {
+    color: var(--link-color);
+    font-size: .75rem;
+}
