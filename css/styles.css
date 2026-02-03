@@ -23,6 +23,7 @@
 html{
    scroll-behavior: smooth;
    font-size: var(--base-font-size);
+   overflow-y: scroll;
 }
 
 body {
@@ -31,6 +32,10 @@ body {
     line-height: 1.5;
     font-size: var(--base-font-size);
     hyphens: auto;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
@@ -77,12 +82,26 @@ nav > a:hover {
     transform: scale(1.1);
 }
 
+main {
+    flex-grow: 1;
+}
+
 main h2, h3, h4, p, span {
     color: var(--text-color);
     padding: 1rem;
     margin-top: auto;
     margin-bottom: auto;
-    text-align: center;
+    text-align: left;
+}
+
+li {
+    color: var(--text-color);
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+
+h2 {
+    text-decoration: underline;
 }
 
 hr {
@@ -94,6 +113,7 @@ hr {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 section {
@@ -120,7 +140,7 @@ section {
     margin-bottom: 5rem;
     padding: 1rem;
     width: max(min(30rem, 80vw), 55%);
-    transition: background-image 4s ease-in-out;
+    transition: background-image 1s ease-in-out;
     will-change: transform;
     backface-visibility: hidden;
     -webkit-font-smoothing: antialiased;
@@ -146,12 +166,22 @@ section:hover {
     border-radius: 50%;
 }
 
+.project-pic {
+    max-width: 95%;
+    margin: 1rem;
+    border-radius: 15px;
+}
+
 main a {
     text-decoration-color: var(--text-color);
     color: var(--text-color);
     margin: auto;
-    padding: 1rem;
     text-align: center;
+}
+
+.contact a {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 main a:visited {
@@ -161,27 +191,48 @@ main a:visited {
 .content-paragraph {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+}
+
+button {
+    padding: 1rem;
+    border-style: solid;
+    border-radius: 15px;
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    margin: 1rem;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+button:hover {
+    transform: scale(1.02);
+}
+
+button:active {
+    transform: scale(0.98);
 }
 
 footer {
-    margin-top: 5rem;
-    padding: 0.5rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
     /*For older versions of Safari that dont support from*/
     background-color: var(--accent-color);
     background-image: 
         linear-gradient(to top, var(--accent-color), 
                             var(--text-color)
                     );
-    bottom: 0;
-    position: fixed;
-    width: 100vw;
     z-index: 10;
+    width: 100%;
     text-align: center;
     font-size: var(--base-font-size);
 }
 
 .projects {
-    margin-bottom: 8rem;
+    margin-bottom: 6rem;
 }
 
 footer > small {

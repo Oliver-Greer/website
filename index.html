@@ -14,14 +14,14 @@
             <nav>
                 <a href="#about">About</a>
                 <a href="#contact">Contact</a>
-                <a href="#projects">Projects</a>
+                <a href="/projects.html#projects">Projects</a>
             </nav>
         </header>
         <main>
             <div class="page-content-container">
                 <section id="about" class="about">
                     <h2>About Me</h2>
-                    <img src="\images\profilePicture.jpg" class="profile-pic" alt="A picture of me.">
+                    <img src="/images/profilePicture.jpg" class="profile-pic" alt="A picture of me.">
                     <p>
                         I'm a Electrical Engineering & Computer Science student at 
                         UC Berkeley interested in all things programming. 
@@ -29,7 +29,7 @@
                         and compilers.
                     </p>
                 </section>
-                <section id="contact">
+                <section id="contact" class="contact">
                     <h2>Contact</h2>
                     <p class="content-paragraph">
                         <a href="https://www.linkedin.com/in/oliver-greer-906086228/">
@@ -45,11 +45,8 @@
                 </section>
                 <section id="projects" class="projects">
                     <h2>Projects</h2>
-                    <p>Coming Soon! For now check out the
-                        <p>
-                            <a href="\index-old.html">old website</a>
-                        </p>
-                    </p>
+                    <button id="project-button">View My Projects</button>
+                    <script src="/js/project-transition.js" defer></script>
                 </section>
             </div>
         </main>
