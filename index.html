@@ -12,43 +12,133 @@
     <body>
         <header>
             <nav>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>
-                <a href="/projects.html#projects">Projects</a>
+                <div class="name">
+                    <a href="/index.html">Oliver Greer</a>
+                </div>
+                <div class="links">
+                    <a href="/projects.html">Projects</a>
+                </div>
             </nav>
+            <hr>
         </header>
         <main>
-            <div class="page-content-container">
-                <section id="about" class="about">
-                    <h2>About Me</h2>
-                    <img src="/images/profilePicture.jpg" class="profile-pic" alt="A picture of me.">
+            <section>
+                <div class="intro">
                     <p>
-                        I'm a Electrical Engineering & Computer Science student at 
-                        UC Berkeley interested in all things programming. 
-                        Right now I'm mostly working on full stack web development, computer architecture, 
-                        and compilers.
+                        I am a junior at UC Berkeley majoring in Electrical Engineering and Computer Science 
+                        with a focus on systems engineering. I'm primarily interested in programming languages 
+                        and compilers, databases, operating systems, and high performance computing.
                     </p>
-                </section>
-                <section id="contact" class="contact">
+                    <p>
+                        Before attending UC Berkeley I worked in various manufacturing roles 
+                        including metrology and thin film deposition. 
+                        I spent one and a half years at a renewable energy company doing project development, 
+                        where I developed an automated DocuSign contract delivery system for low-income customers.
+                    </p>
+                    <p>
+                        To see what I'm currently working on check out my project page.
+                    </p>
+                </div>
+                <aside>
+                    <img src="/images/profilePicture.jpg" class="profile-pic" alt="A picture of me.">
+                </aside>
+            </section>
+            <section>
+                <div class="education">
+                    <h2>
+                        Education
+                    </h2>
+                    <p><b>BS in Electrical Engineering and Computer Science</b></p>
+                    <p>2025-2027 &nbsp;<em>University of California, Berkeley</em></p>
+                    <p><b>AS in Engineering, Mathematics, Chemistry, Physics</b></p>
+                    <p>2021-2025 &nbsp;<em>Santa Rosa Junior College</em></p>
+                </div>
+            </section>
+            <section>
+                <div class="contact">
                     <h2>Contact</h2>
-                    <p class="content-paragraph">
-                        <a href="https://www.linkedin.com/in/oliver-greer-906086228/">
-                            LinkedIn
-                        </a>
-                        <a href= "mailto&#58;o%6Civ%65r&#37;73&#99;&#37;6F%7&#52;&#116;g&#114;eer&#64;%67ma&#37;&#54;9l&#46;&#99;om">
-                            oliverscot&#116;g&#114;eer&#64;g&#109;ail&#46;co&#109;
-                        </a>
-                        <a href= "https://github.com/Oliver-Greer">
+                    <ul>
+                        <li>
+                            <a href="https://www.linkedin.com/in/oliver-greer-906086228/">
+                                LinkedIn
+                            </a>
+                        </li>
+                        <li>
+                            <a href= "mailto&#58;o%6Civ%65r&#37;73&#99;&#37;6F%7&#52;&#116;g&#114;eer&#64;%67ma&#37;&#54;9l&#46;&#99;om">
+                                oliverscot&#116;g&#114;eer&#64;g&#109;ail&#46;co&#109;
+                            </a>
+                        </li>
+                        <li>
+                            <a href= "https://github.com/Oliver-Greer">
                             Github
                         </a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section>
+                <div class="misc">
+                    <h2>
+                    Miscellaneous
+                    </h2>
+                    <p>
+                        I like to learn by reading. Here are some of the books I've found to be the most helpful, 
+                        along with some extra non-computer science book recommendations.
                     </p>
-                </section>
-                <section id="projects" class="projects">
-                    <h2>Projects</h2>
-                    <button id="project-button">View My Projects</button>
-                    <script src="/js/project-transition.js" defer></script>
-                </section>
-            </div>
+                    <ul>
+                        <li>
+                            <a href="https://doc.rust-lang.org/book/">
+                                <em>
+                                    The Rust Programming Language by Steve Klabnik, Carol Nichols, and Chris Krycho, with contributions from the Rust Community
+                                </em>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://build-your-own.org/database/">
+                                <em>
+                                    Build Your Own Database From Scratch in Go by James Smith
+                                </em>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://craftinginterpreters.com/">
+                                <em>
+                                    Crafting Interpreters by Robert Nystrom
+                                </em>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.dummies.com/book/technology/programming-web-design/general-programming-web-design/html-css-javascript-all-in-one-for-dummies-299520/">
+                                <em>
+                                    HTML, CSS, & JavaScript All-in-One For Dummies by Paul McFedries
+                                </em>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.roadtoreact.com/">
+                                <em>
+                                    The Road to React by Robin Wieruch
+                                </em>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.amazon.com/Deliver-Parcels-Beijing-Hu-AnYan/dp/1662603045">
+                                <em>
+                                    I Deliver Parcels in Beijing by Anyan Hu
+                                </em>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.amazon.com/When-Genius-Failed-Long-Term-Management/dp/0375758259">
+                                <em>
+                                    When Genius Failed by Roger Lowenstein
+                                </em>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <hr>
         </main>
         <footer>
             <small>
@@ -56,4 +146,6 @@
             </small>
         </footer>
     </body>
+    <script data-goatcounter="https://olivergreer.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </html>
