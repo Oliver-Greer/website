@@ -6,6 +6,7 @@
     --text-color: #000000;
     --base-font-size: 1rem;
     --profile-pic-size: 200px;
+    --max-p-length: 60ch;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,7 +20,8 @@
 
 @media only screen and (max-width: 767px) {
     :root {
-        --base-font-size: 1.25rem;
+        --base-font-size: 1.15rem;
+        --max-p-length: 40ch;
     }
 }
 
@@ -58,7 +60,7 @@ header {
 }
 
 hr {
-    max-width: calc(60ch + var(--profile-pic-size) + 1.5rem);
+    max-width: calc(var(--max-p-length) + var(--profile-pic-size) + 1.5rem);
     width: 100%;
     border-color: var(--accent-color);
     border-style: solid;
@@ -69,7 +71,7 @@ nav {
     justify-content: space-between;
     align-items: baseline;
     flex-wrap: wrap;
-    max-width: calc(60ch + var(--profile-pic-size) + 2rem);
+    max-width: calc(var(--max-p-length) + var(--profile-pic-size) + 2rem);
     width: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -122,7 +124,7 @@ section {
 
 /* paragraphs in all main sections should have the same style */
 section p, pre {
-    max-width: 60ch;
+    max-width: var(--max-p-length);
     align-items: center;
     margin: 0.5rem;
     color: var(--text-color);
@@ -160,7 +162,7 @@ section h3 {
 ul { list-style: none; }
 
 li {
-    max-width: 60ch;
+    max-width: var(--max-p-length);
     margin: 0.5rem;
 }
 
