@@ -1,11 +1,22 @@
 /* Define color palette */
 :root {
-    --background-color: #fadcc3;
+    --background-color: #FBF4EE;
     --accent-color: #cc904b;
-    --link-color: #cc504b;
+    --link-color: #7F2724;
     --text-color: #000000;
     --base-font-size: 1rem;
-    --profile-pic-size: 210px;
+    --profile-pic-size: 200px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #1F2937;
+        --accent-color: #E0B075;
+        --link-color: #EF5350;
+        --text-color: #F9FAFB;
+        --base-font-size: 1rem;
+        --profile-pic-size: 200px;
+    }
 }
 
 html{
@@ -110,17 +121,20 @@ section p, pre {
     max-width: 60ch;
     align-items: center;
     margin: 0.5rem;
+    color: var(--text-color);
 }
 
 section h2 {
     align-items: left;
     margin: 0.5rem;
     padding-top: 2rem;
+    color: var(--text-color);
 }
 
 section h3 {
     align-items: left;
     margin: 0.5rem;
+    color: var(--text-color);
 }
 
 .profile-pic {
@@ -139,10 +153,19 @@ section h3 {
     width: var(--profile-pic-size);
 }
 
+ul { list-style: none; }
 
 li {
     max-width: 60ch;
     margin: 0.5rem;
+}
+
+li::before { 
+    content: "•"; 
+    color: var(--text-color); 
+    display: inline-block; 
+    width: 1em; 
+    margin-left: -1em; 
 }
 
 /* Page footer */
