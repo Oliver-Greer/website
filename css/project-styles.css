@@ -121,6 +121,13 @@ section {
     align-items: left;
 }
 
+@media only screen and (max-width: 767px) {
+    section {
+        flex-direction: column-reverse;
+
+    }
+}
+
 /* paragraphs in all main sections should have the same style */
 section p, pre {
     max-width: var(--max-p-length);
