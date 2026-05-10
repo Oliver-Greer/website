@@ -50,7 +50,6 @@ body {
 
 /* Header and Nav styling */
 header {
-    background-color: var(--background-color);
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     top: 0;
