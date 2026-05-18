@@ -1,0 +1,9 @@
+Supposedly 2026 is the year of the agent, and indeed agents are taking over our lives. 
+Just about everyone I know is using agents to write their code, 
+and sometimes even to review it. We are using agents to send emails, write technical documents, 
+research, and even file our taxes.
+
+This post won't address whether LLMs are good at this sort of thing.
+There are lots of people much more qualified than I am that can write about that.
+This post will instead address what I see as the greatest issue with LLM assisted coding,
+especially given a world where the agents are effective enough to complete the vast majority of programming tasks.
