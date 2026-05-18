@@ -1,12 +1,6 @@
 /* Define color palette */
 :root {
-    --background-color: #FBF4EE;
-    --accent-color: #cc904b;
-    --link-color: #7F2724;
-    --text-color: #000000;
-    --base-font-size: 1rem;
-    --profile-pic-size: 300px;
-    --max-p-length: 60ch;
+    --pic-size: 300px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,146 +19,19 @@
     }
 }
 
-html{
-   scroll-behavior: smooth;
-   font-size: var(--base-font-size);
-   overflow-y: scroll;
-}
-
-
-
-/* Base page settings */
-body {
-    background-color: var(--background-color);
-    font-family: Roboto, Tahoma, sans-serif;
-    line-height: 1.25;
-    font-size: var(--base-font-size);
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-
-
-/* Header and Nav styling */
-header {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    width: 100%;
-}
-
-hr {
-    max-width: calc(var(--max-p-length) + var(--profile-pic-size) + 1.5rem);
-    width: 100%;
-    border-color: var(--accent-color);
-    border-style: solid;
-}
-
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    flex-wrap: wrap;
-    max-width: calc(var(--max-p-length) + var(--profile-pic-size) + 2rem);
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    gap: 1rem;
-}
-
-nav > .name {
-    justify-content: left;
-    color: var(--link-color);
-    font-size: 2rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    margin: 0.25rem;
-}
-
-.name > a {
-    text-decoration: none;
-}
-
-nav > .links {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    font-size: 1.15rem;
-    margin: 0.25rem;
-}
-
-a {
-    text-decoration-skip-ink: auto;
-    color: var(--link-color);
-}
-
-a:visited {
+section h2 {
     color: var(--link-color); 
 }
 
-
-
-/* Main page content styling */
-main {
-    flex-grow: 1;
-}
-
-section {
-    display: flex;
-    justify-content: left;
-    align-items: left;
-}
-
-@media only screen and (max-width: 767px) {
-    section {
-        flex-direction: column-reverse;
-
-    }
-}
-
-/* paragraphs in all main sections should have the same style */
-section p, pre {
-    max-width: var(--max-p-length);
-    align-items: center;
-    margin: 0.5rem;
-    color: var(--text-color);
-}
-
-section h2 {
-    align-items: left;
-    margin: 0.5rem;
-    padding-top: 2rem;
-}
-
 section h3 {
-    align-items: left;
-    margin: 0.5rem;
+    color: var(--link-color); 
 }
 
 .project-pic {
     border-style: solid;
     border-color: var(--accent-color);
-    margin: 0.5rem;
-    width: var(--profile-pic-size);
-}
-
-/* Page footer */
-footer {
-    padding-top: 2rem;
-    padding-bottom: 0.5rem;
-    z-index: 10;
-    width: 100%;
-    text-align: center;
-    font-size: var(--base-font-size);
-}
-
-footer > small {
-    color: var(--text-color);
-    font-size: .75rem;
+    margin-left: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.7rem;
+    width: var(--pic-size);
 }
