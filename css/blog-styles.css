@@ -1,0 +1,53 @@
+hr {
+    font-size: 1.15rem;
+    width: var(--max-p-length);
+}
+
+nav {
+    font-size: 1.15rem;
+    width: var(--max-p-length);
+}
+
+body {
+    line-height: 1.5;
+}
+
+section {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+
+article {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+article p {
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+section a {
+    color: var(--text-color);
+}
+
+section a:visited {
+    color: var(--text-color); 
+}
+
+section b {
+    font-size: 1.15rem;
+}
+
+section p {
+    font-size: 1.15rem;
+    margin-bottom: 1.5rem;
+}
+
+h1 {
+    font-size: 1.5rem;
+}
