@@ -28,47 +28,70 @@ async function generatePost() {
         postSection.appendChild(template.content);
     } else {
 
-        const paragraphs = jsonData[0].body.split('\n\n');
+        const lines = jsonData[0].body.split('\n');
 
-        let paragraphContent = ``;
+        let paragraph = [];
+        let content = ``;
         let insideBlock = false;
         
-        paragraphs.forEach(paragraph => {
+        lines.forEach(line => {
 
-            const trimmedParagraph = paragraph.trim();
-            if (trimmedParagraph == "") {
-                if (insideBlock) {
-                    paragraphContent += `${paragraph}\n`;
+            const trimmedLine = line.trim();
+
+            // if there is a < or </ or $$:
+                // if not in block: flush current paragraph to <p> tag, reset paragraph to []
+                // toggle block
+                // add line to html
+
+            // if in block:
+                // add line to html
+            // else:
+                // if line is empty, start new paragraph
+                // else, push line to paragraph array
+
+            // putting $$ in here for mathJax later
+            // We check for html tags as well so we can write html in the txt file
+            // Jank but it works
+            if (trimmedLine.startsWith('<') || trimmedLine.startsWith('</') || trimmedLine.startsWith('$$')) {
+                if (!insideBlock) {
+                    let newParagraph = paragraph.join('\n')
+                    content += `<p>${newParagraph}</p>\n`;
                 }
+                paragraph = []
+                insideBlock = !insideBlock;
+                content += `${line}\n`;
                 return;
             }
             
-            // putting $$ in here for mathJax later
-            // We check for html tags as well so we can write html in the txt
-            // Jank but it works
-            if (trimmedParagraph.startsWith('<') || trimmedParagraph.startsWith('</') 
-                || trimmedParagraph.startsWith('$$')) {
-                insideBlock = !insideBlock;
-                paragraphContent += `${paragraph}\n`;
-                return;
-            }
-
             if (insideBlock) {
-                paragraphContent += `${paragraph}\n`;
+                content += `${line}\n`;
                 return;
             } else {
-                paragraphContent += `<p>${trimmedParagraph}</p>\n`;
+                if (trimmedLine == "") {
+                    let newParagraph = paragraph.join('\n')
+                    content += `<p>${newParagraph}</p>\n`;
+                    paragraph = []
+                } else {
+                    paragraph.push(`${line}\n`);
+                }
             }
         })
+
+        // if there is still some left over flush
+        if (paragraph.length > 0) {
+            let newParagraph = paragraph.join('\n')
+            content += `<p>${newParagraph}</p>\n`;
+        }
         
         const htmlContent = `<h1>
                             ${jsonData[0].title}
                             </h1>
-                            <h5>
+                            <small>
                                 Oliver Greer | ${jsonData[0].date}
-                            </h5>
+                            </small>
                             <br>
-                            ${paragraphContent}
+                            <br>
+                            ${content}
                             `;
 
         template.innerHTML = htmlContent;
