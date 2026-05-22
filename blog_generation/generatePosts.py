@@ -15,21 +15,22 @@ def parse_blog_posts(folder_path: str, save_path: str):
 
         with open(filepath, 'r', encoding='utf-8') as f:
             content: str = f.read()
-            # filename is the title
-            # tag is also the title
-            # date is the time since last modification
-            # body is the text itself
             formatted_filename = os.path.splitext(filename)[0]
+            author_date, title = formatted_filename.split('_', 1)
 
             new_post: dict[str, str] = {
                 "tag": formatted_filename,
-                "title": formatted_filename,
-                "date": datetime.fromtimestamp(os.path.getmtime(filepath)).strftime('%d %B, %Y'),
-                "body": content
+                "title": title,
+                "date": datetime.strptime(author_date, '%Y-%m-%d').strftime('%d %B, %Y'),
+                "body": content,
+                "timestamp": author_date
             }
             blog_posts.append(new_post)
 
-    filename: str = os.fsencode("posts.json")
+    # Sort by timestamp ascending. The timestamp field will not actually be used after this
+    # Not efficient but how much will I end up writing really?
+    blog_posts.sort(key = lambda x: datetime.strptime(x["timestamp"], '%Y-%m-%d'), reverse = True)
+    filename: bytes = os.fsencode("posts.json")
     save_filepath: str = os.path.join(save_dir, filename)
     with open(save_filepath, 'w') as f:
         json.dump(blog_posts, f, indent=4)
