@@ -1,0 +1,16 @@
+My notes for my program analysis course for the Fall 2026 semester at Berkeley.
+
+<br></br>
+
+<b>Helpful Research Tools:</b>
+<ul>
+    <li><a href="https://microsoft.github.io/z3guide/docs/logic/intro">Z3 Usage Guide</a></li>
+    <li><a href="https://github.com/Z3Prover/doc">Z3 Docs</a></li>
+    <li><a href="https://clang.llvm.org/docs/ClangStaticAnalyzer.html">Clang Static Analyzer Docs</a></li>
+    <li><a href="./pdfs/hitchhikers_guide.pdf">Lean 4 Logical Verification Guide</a></li>
+</ul>
+
+<b>Papers:</b>
+<ul>
+    <li>More to come!</li>
+</ul>
