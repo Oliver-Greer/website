@@ -1,0 +1,37 @@
+Search has degraded to the point where I have been using ddgr for 50% of my web searches, so I figured I'd just start keeping track of
+webpages I use most often here. This will naturally evolve over time.
+
+This are helpful resources for systems programming tools (mostly for C/C++) but also some general stuff.
+
+<br></br>
+
+<b>C/C++ Development:</b>
+<ul>
+    <li><a href="http://www.unknownroad.com/rtfm/gdbtut/gdbtoc.html">gdb debugger tutorial</a></li>
+    <li><a href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/">gdb official docs</a></li>
+    <li><a href="https://cmake.org/cmake/help/latest/guide/tutorial/index.html">CMake getting started</a></li>
+    <li><a href="https://cmake.org/cmake/help/latest/">CMake official docs</a></li>
+    <li><a href="https://valgrind.org/docs/manual/manual.html">Valgrind User Manual</a></li>
+    <li><a href="https://devdocs.io/c/">Nicely formatted C docs</a></li>
+    <li><a href="https://www.cppreference.com">Official cpp reference</a></li>
+    <li><a href="https://clang.llvm.org/docs/index.html">Clang official docs</a></li>
+</ul>
+
+<b>Rust Development:</b>
+<ul>
+    <li><a href="https://doc.rust-lang.org/stable/book/index.html">The Rust Book</a></li>
+    <li><a href="https://docs.rs/anyhow/latest/anyhow/">Anyhow crate docs</a></li>
+    <li><a href="https://docs.rs/thiserror/latest/thiserror/">thiserror crate docs</a></li>
+    <li><a href="https://rust-random.github.io/book/">Rust rand book (rand crate docs)</a></li>
+    <li><a href="https://doc.rust-lang.org/stable/rust-by-example/index.html">Rust by example</a></li>
+</ul>
+
+<b>General Stuff:</b>
+<ul>
+    <li><a href="https://wiki.wlug.org.nz/MakefileHowto">Make Howto</a></li>
+    <li><a href="https://makefiletutorial.com">Makefile tutorial</a></li>
+    <li><a href="https://www.gnu.org/software/make/manual/make.html">GNU Make official docs</a></li>
+    <li><a href="https://danielmiessler.com/blog/tmux">tmux getting started</a></li>
+    <li><a href="https://docs.helix-editor.com">Helix editor official docs</a></li>
+    <li><a href="https://think-like-a-git.net">Nice git reference</a></li>
+</ul>

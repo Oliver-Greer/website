@@ -30,8 +30,8 @@ def parse_blog_posts(folder_path: str, save_path: str):
     # Sort by timestamp ascending. The timestamp field will not actually be used after this
     # Not efficient but how much will I end up writing really?
     blog_posts.sort(key = lambda x: datetime.strptime(x["timestamp"], '%Y-%m-%d'), reverse = True)
-    filename: bytes = os.fsencode("posts.json")
-    save_filepath: str = os.path.join(save_dir, filename)
+    filename_bytes: bytes = os.fsencode("posts.json")
+    save_filepath: bytes = os.path.join(save_dir, filename_bytes)
     with open(save_filepath, 'w') as f:
         json.dump(blog_posts, f, indent=4)
 
