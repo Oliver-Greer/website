@@ -36,12 +36,8 @@ article p {
     margin-right: auto;
 }
 
-section a, small, h1, ul, ol, li, b {
+section small, h1, ul, ol, li, b {
     color: var(--text-color);
-}
-
-section a:visited {
-    color: var(--text-color); 
 }
 
 section b {

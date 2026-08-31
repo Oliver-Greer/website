@@ -1,9 +1,4 @@
-Search has degraded to the point where I have been using ddgr for 50% of my web searches, so I figured I'd just start keeping track of
-webpages I use most often here. This will naturally evolve over time.
-
 This are helpful resources for systems programming tools (mostly for C/C++) but also some general stuff.
-
-<br></br>
 
 <b>C/C++ Development:</b>
 <ul>

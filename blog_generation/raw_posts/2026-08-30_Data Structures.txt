@@ -1,0 +1,31 @@
+Below are notes relating to data structures. Some are resources for optimizing common data structures, others are for understand concurrency, 
+and some are notes on interesting data structures that are rarely used in practice.
+
+<b>Hashmaps:</b>
+<ul>
+    <li><a href="https://thenumb.at/Hashtables/">Optimizing Open Addressing</a></li>
+    <li><a href="https://bluuewhale.github.io/posts/concurrent-hashmap-designs/">Concurrent Hash Table Designs</a></li>
+    <li><a href="https://developer.nvidia.com/blog/maximizing-performance-with-massively-parallel-hash-maps-on-gpus/">GPU Hashmaps with Cuda</a></li>
+    <li><a href="https://arxiv.org/pdf/1601.04017">Concurrent Hash Tables: Fast and General(?)!</a></li>
+    <li><a href="https://abseil.io/about/design/swisstables">Swiss Tables Design Notes</a></li>
+</ul>
+
+<b>EGraphs:</b>
+<ul>
+    <li><a href="https://arxiv.org/pdf/2004.03082">egg: Fast and Extensible Equality Saturation</a></li>
+    <li><a href="https://dl.acm.org/doi/10.1145/322186.322198">Fast Decision Procedures Based on Congruence Closure</a></li>
+</ul>
+
+<p>
+Recently I've been very into reading old papers on all the interesting data structures theorists like 
+Dan Willard came up with in the 1980's. Here are some notes related to that. More to come as I read more!
+
+I wish I could directly include these papers but some of them are paywalled :(
+</p>
+
+<b>Y-Fast-Trie:</b>
+<ul>
+    <li><a href="https://www.sciencedirect.com/science/article/abs/pii/0020019083900753?via%3Dihub">Log-logarithmic worst-case range queries are possible in space Θ(N)</a></li>
+    <li><a href="https://github.com/vaganov/y-fast">C++ Implementation of Y-Fast-Trie</a></li>
+    <li><a href="https://cccg.ca/proceedings/2010/paper69.pdf">Fast Local Searches and Updates in Bounded Universes</a></li>
+</ul>

@@ -1,7 +1,5 @@
 My notes for my program analysis course for the Fall 2026 semester at Berkeley.
 
-<br></br>
-
 <b>Helpful Research Tools:</b>
 <ul>
     <li><a href="https://microsoft.github.io/z3guide/docs/logic/intro">Z3 Usage Guide</a></li>
