@@ -16,11 +16,17 @@ and some are notes on interesting data structures that are rarely used in practi
     <li><a href="https://dl.acm.org/doi/10.1145/322186.322198">Fast Decision Procedures Based on Congruence Closure</a></li>
 </ul>
 
+<b>Union-Find:</b>
+<ul>
+    <li><a href="https://www.philipzucker.com/union-find-groupoid/">Philip Zucker: Groupoid Annotated Union Finds</a></li>
+    <li><a href="https://arxiv.org/pdf/1911.06347">In Search of the Fastest Concurrent Union-Find Algorithm</a></li>
+</ul>
+
 <p>
 Recently I've been very into reading old papers on all the interesting data structures theorists like 
-Dan Willard came up with in the 1980's. Here are some notes related to that. More to come as I read more!
+Dan Willard came up with in the 1980's. There will be some notes related to that. More to come as I read more!
 
-I wish I could directly include these papers but some of them are paywalled :(
+I wish I could directly include all of these papers but some of them are paywalled :(
 </p>
 
 <b>Y-Fast-Trie:</b>
