@@ -10,5 +10,7 @@ My notes for my program analysis course for the Fall 2026 semester at Berkeley.
 
 <b>Papers:</b>
 <ul>
-    <li>More to come!</li>
+    <li><a href="https://dl.acm.org/doi/10.1145/1064978.1065036">DART: directed automated random testing</a></li>
+    <li><a href="https://dl.acm.org/doi/10.1145/1095430.1081750">CUTE: a concolic unit testing engine for C</a></li>
+    <li><a href="https://dl.acm.org/doi/10.1145/2786805.2786830">MultiSE: multi-path symbolic execution using value summaries</a></li>
 </ul>

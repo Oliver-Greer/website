@@ -10,7 +10,7 @@
         "tag": "2026-08-29_CS264 Implementation of Programming Languages",
         "title": "CS264 Implementation of Programming Languages",
         "date": "29 August, 2026",
-        "body": "My notes for my program analysis course for the Fall 2026 semester at Berkeley.\n\n<b>Helpful Research Tools:</b>\n<ul>\n    <li><a href=\"https://microsoft.github.io/z3guide/docs/logic/intro\">Z3 Usage Guide</a></li>\n    <li><a href=\"https://github.com/Z3Prover/doc\">Z3 Docs</a></li>\n    <li><a href=\"https://clang.llvm.org/docs/ClangStaticAnalyzer.html\">Clang Static Analyzer Docs</a></li>\n    <li><a href=\"./pdfs/hitchhikers_guide.pdf\">Lean 4 Logical Verification Guide</a></li>\n</ul>\n\n<b>Papers:</b>\n<ul>\n    <li>More to come!</li>\n</ul>",
+        "body": "My notes for my program analysis course for the Fall 2026 semester at Berkeley.\n\n<b>Helpful Research Tools:</b>\n<ul>\n    <li><a href=\"https://microsoft.github.io/z3guide/docs/logic/intro\">Z3 Usage Guide</a></li>\n    <li><a href=\"https://github.com/Z3Prover/doc\">Z3 Docs</a></li>\n    <li><a href=\"https://clang.llvm.org/docs/ClangStaticAnalyzer.html\">Clang Static Analyzer Docs</a></li>\n    <li><a href=\"./pdfs/hitchhikers_guide.pdf\">Lean 4 Logical Verification Guide</a></li>\n</ul>\n\n<b>Papers:</b>\n<ul>\n    <li><a href=\"https://dl.acm.org/doi/10.1145/1064978.1065036\">DART: directed automated random testing</a></li>\n    <li><a href=\"https://dl.acm.org/doi/10.1145/1095430.1081750\">CUTE: a concolic unit testing engine for C</a></li>\n    <li><a href=\"https://dl.acm.org/doi/10.1145/2786805.2786830\">MultiSE: multi-path symbolic execution using value summaries</a></li>\n</ul>",
         "timestamp": "2026-08-29"
     },
     {
