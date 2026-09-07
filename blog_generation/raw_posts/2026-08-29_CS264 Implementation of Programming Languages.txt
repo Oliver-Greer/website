@@ -8,9 +8,33 @@ My notes for my program analysis course for the Fall 2026 semester at Berkeley.
     <li><a href="./pdfs/hitchhikers_guide.pdf">Lean 4 Logical Verification Guide</a></li>
 </ul>
 
-<b>Papers:</b>
+<b>Class Papers:</b>
 <ul>
     <li><a href="https://dl.acm.org/doi/10.1145/1064978.1065036">DART: directed automated random testing</a></li>
     <li><a href="https://dl.acm.org/doi/10.1145/1095430.1081750">CUTE: a concolic unit testing engine for C</a></li>
     <li><a href="https://dl.acm.org/doi/10.1145/2786805.2786830">MultiSE: multi-path symbolic execution using value summaries</a></li>
+</ul>
+
+<b>Project Reading List:</b>
+<ul>
+    <li><a href="https://www.semanticscholar.org/paper/Applications-of-Path-Compression-on-Balanced-Trees-Tarjan/f5d65571f7337f55e5e281be6b6f213f5fed06ec">Applications of Path Compression on Balanced Trees</a></li>
+    <li><a href="https://dl.acm.org/doi/10.1145/3729298">Relational Abstractions Based on Labeled Union-Find</a></li>
+    <li><a href="https://www.normalesup.org/~dlesbre/files/publications/2024-nsad-labeled-union-find.pdf">Labeled union-find for constraint factorization</a></li>
+    <li><a href="https://dl.acm.org/doi/10.1145/3729326">Slotted E-Graphs: First-Class Support for (Bound) Variables in E-Graphs</a></li>
+    <li><a href="https://arxiv.org/pdf/2504.14340">Omelets Need Onions: E-graphs Modulo Theories via Bottom-up E-Matching</a></li>
+    <li><a href="https://arxiv.org/abs/2305.19203">Colored E-Graph: Equality Reasoning with Conditions</a></li>
+    <li><a href="https://repositum.tuwien.at/bitstream/20.500.12708/200780/1/Singher%20Eytan%20-%202024%20-%20Easter%20Egg%20Equality%20Reasoning%20Based%20on%20E-Graphs%20with...pdf">Easter Egg: Equality Reasoning Based on E-Graphs with Multiple Assumptions</a></li>
+    <li><a href="https://dl.acm.org/doi/10.1145/3808249">Versioned E-Graphs</a></li>
+    <li><a href="https://arxiv.org/abs/2507.11897">Towards Relational Contextual Equality Saturation</a></li>
+    <li><a href="https://arxiv.org/pdf/2605.28694">E-Path: Equality Saturation for Control-Flow Graphs</a></li>
+    <li><a href="https://arxiv.org/pdf/2505.09363">eqsat: An Equality Saturation Dialect for Non-destructive Rewriting</a></li>
+    <li><a href="https://www.researchgate.net/publication/239153460_Union-Find_and_Congruence_Closure_Algorithms_that_Produce_Proofs">Union-Find and Congruence Closure Algorithms that Produce Proofs</a></li>
+    <li><a href="https://arxiv.org/abs/2504.10246">Simplified and Verified: A Second Look at a Proof-Producing Union-Find Algorithm</a></li>
+    <li><a href="https://web.math.princeton.edu/~pds/papers/Apaths/paper.pdf">EXCLUDING A GROUP-LABELLED GRAPH</a></li>
+    <li><a href="https://www.sciencedirect.com/science/article/pii/S009589560500105X">Non-zero disjoint cycles in highly connected group labelled graphs</a></li>
+    <li><a href="https://link.springer.com/article/10.1007/s00493-021-4736-x">Finding a Shortest Non-Zero Path in Group-Labeled Graphs</a></li>
+    <li><a href="https://link.springer.com/chapter/10.1007/978-3-662-47672-7_65">Finding a Path in Group-Labeled Graphs with Two Labels Forbidden</a></li>
+    <li><a href="https://arxiv.org/abs/2604.23169">A Linear-Time Algorithm for Finding an Odd/Even Cycle Through Two Specified Vertices</a></li>
+    <li><a href="https://arxiv.org/abs/2505.22802">From Signed Networks to Group Graphs</a></li>
+    <li><a href="https://www.sciencedirect.com/science/article/pii/0022000081900027?fr=RR-2&ref=pdf_download&rr=a356d24d1a3d2734">A complete proof of correctness of the Knuth-Bendix completion algorithm</a></li>
 </ul>
