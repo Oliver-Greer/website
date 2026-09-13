@@ -24,9 +24,7 @@ and some are notes on interesting data structures that are rarely used in practi
 
 <p>
 Recently I've been very into reading old papers on all the interesting data structures theorists like 
-Dan Willard came up with in the 1980's. There will be some notes related to that. More to come as I read more!
-
-I wish I could directly include all of these papers but some of them are paywalled :(
+Dan Willard came up with in the 1980's. Here are some notes related to that. More to come as I read more!
 </p>
 
 <b>Y-Fast-Trie:</b>

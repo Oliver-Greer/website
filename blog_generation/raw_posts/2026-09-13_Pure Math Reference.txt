@@ -1,0 +1,10 @@
+Links to pure math and PL readings and textbooks that I would like to understand for PL research topics.
+
+<b>Readings:</b>
+<ul>
+    <li><a href="https://www.cs.ox.ac.uk/people/samson.abramsky/handbook.pdf">Domain Theory Handbook</a></li>
+    <li><a href="https://arxiv.org/pdf/1612.09375">Category Theory Book</a></li>
+    <li><a href="https://www.cambridge.org/core/books/nonlinear-perronfrobenius-theory/6D321F90B3C07ACCF17BC58BE42CEA1D">Nonlinear Perron–Frobenius Theory</a></li>
+    <li><a href="https://link.springer.com/book/10.1007/978-1-84996-299-5">Max-linear Systems: Theory and Algorithms</a></li>
+    <li><a href="https://mitpress.mit.edu/9780262044905/principles-of-abstract-interpretation/">Principles of Abstract Interpretation</a></li>
+</ul>
