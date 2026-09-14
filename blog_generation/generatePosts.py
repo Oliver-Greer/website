@@ -37,5 +37,5 @@ def parse_blog_posts(folder_path: str, save_path: str):
 
 
 if __name__ == "__main__":
-    # paths are designed such that this works if run within blog_generation
-    parse_blog_posts(folder_path = "./raw_posts", save_path = "../posts")
+    # paths are designed such that this works if run within the website folder
+    parse_blog_posts(folder_path = "./blog_generation/raw_posts", save_path = "./posts")

@@ -32,7 +32,7 @@ async function generateLinks() {
                                         <b> ${post.title} </b>
                                     </a>
                                     <br>
-                                    <small style="margin-left: 1rem;">  ${post.date} </small>
+                                    <small style="margin-left: 1rem;">  Last Updated: ${post.date} </small>
                                 </li>`
             template.innerHTML = htmlContent;
             ul.appendChild(template.content);

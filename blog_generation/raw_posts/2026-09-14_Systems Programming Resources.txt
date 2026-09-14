@@ -30,4 +30,5 @@ This are helpful resources for systems programming tools (mostly for C/C++) but 
     <li><a href="https://docs.helix-editor.com">Helix editor official docs</a></li>
     <li><a href="http://ref.x86asm.net">X86 Assembly Instructions</a></li>
     <li><a href="https://think-like-a-git.net">Nice git reference</a></li>
+    <li><a href="https://neovim.io/doc/user/">NeoVim documentation</a></li>
 </ul>

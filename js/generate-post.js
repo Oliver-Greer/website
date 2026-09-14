@@ -87,7 +87,11 @@ async function generatePost() {
                             ${jsonData[0].title}
                             </h1>
                             <small>
-                                Oliver Greer | ${jsonData[0].date}
+                                Oliver Greer
+                            </small>
+                            <br>
+                            <small>
+                                Last Updated: ${jsonData[0].date}
                             </small>
                             <br>
                             <br>
