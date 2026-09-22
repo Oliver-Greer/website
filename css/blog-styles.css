@@ -2,8 +2,15 @@
     --max-p-length: 70ch;
 }
 
+@media only screen and (max-width: 767px) {
+    :root {
+        --base-font-size: 1.15rem;
+        --max-p-length: 40ch;
+    }
+}
+
 hr {
-    width: var(--max-p-length);
+    max-width: min(100%, calc(var(--max-p-length)));
 }
 
 nav {
@@ -18,7 +25,7 @@ section {
     justify-content: center;
     align-items: center;
     text-align: center;
-    width: var(--max-p-length);
+    max-width: var(--max-p-length);
     margin-left: auto;
     margin-right: auto;
 }
