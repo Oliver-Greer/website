@@ -1,5 +1,12 @@
 [
     {
+        "tag": "2026-09-22_Order Theory",
+        "title": "Order Theory",
+        "date": "22 September, 2026",
+        "body": "Notes on \"Introduction to Lattices and Order\" by B.A. Davey and H.A. Priestley.\n\n<b>Definitions:</b>\n<ul>\n    <li>\n        <b>Partial Order:</b> Let P be a set. A partial order on P is a binary relation <= such that for all x,y,z in P:\n        <ul>\n            <li>x &lt;= x (reflexivity)</li>\n            <li>x &lt;= y and y &lt;= x => x = y (antisymmetry)</li>\n            <li>x &lt;= y and y &lt;= z => x &lt;= z (transitivity)</li>\n        </ul>\n        If the above conditions are met, then P is an ordered set or poset. \n        Notation varies but typically P is shown as &lt;P;&lt;=>. \n        Any set with an order \"=\" is called the discrete order.\n\n        If condition 2 on any set Q is not met, but condition 1 and 3 \n        are (&lt;= is not antisymmetric) then &lt;= is called a quasi-order or pre-order.\n    </li>\n    <li>\n        <b>Comparability:</b> If x !&lt;= y and y !&lt;= x, then x and y are not comparable. Comparability is denoted by ||.\n    </li>\n</ul>\n\n<b>\n    Forming New Ordered Sets From Existing Ones:\n</b>\n\nAny subset Q of a poset P gets its ordering from P. \nThis is called an induced order.",
+        "timestamp": "2026-09-22"
+    },
+    {
         "tag": "2026-09-14_Systems Programming Resources",
         "title": "Systems Programming Resources",
         "date": "14 September, 2026",
