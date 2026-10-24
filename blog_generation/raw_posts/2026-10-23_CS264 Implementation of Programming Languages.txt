@@ -13,6 +13,12 @@ My notes for my program analysis course for the Fall 2026 semester at Berkeley.
     <li><a href="https://dl.acm.org/doi/10.1145/1064978.1065036">DART: directed automated random testing</a></li>
     <li><a href="https://dl.acm.org/doi/10.1145/1095430.1081750">CUTE: a concolic unit testing engine for C</a></li>
     <li><a href="https://dl.acm.org/doi/10.1145/2786805.2786830">MultiSE: multi-path symbolic execution using value summaries</a></li>
+    <li><a href="https://dl.acm.org/doi/10.1145/3360600">FuzzFactory: Domain-Specific Fuzzing with Waypoints</a></li>
+    <li><a href="https://www.cs.purdue.edu/homes/xyzhang/fall07/Papers/delta-debugging.pdf">Simplifying and Isolating Failure-Inducing Input</a></li>
+    <li><a href="https://www.cis.upenn.edu/~alur/SyGuS13.pdf">Syntax-Guided Synthesis</a></li>
+    <li><a href="https://dl.acm.org/doi/10.1145/265924.265927">Eraser: A Dynamic Data Race Detector for Multithreaded Programs</a></li>
+    <li><a href="https://www.cs.columbia.edu/~junfeng/10fa-e6998/papers/hybrid.pdf">Hybrid Dynamic Data Race Detection</a></li>
+    <li><a href="https://research.cs.wisc.edu/wpis/papers/tr1386.pdf">Program Analysis via Graph Reachability</a></li>
 </ul>
 
 <b>Project Reading List:</b>
